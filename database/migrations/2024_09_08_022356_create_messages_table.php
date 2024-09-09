@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('apartment_id'); // Chiave esterna verso la tabella apartments
+            $table->string('name'); //Campo nome
+            $table->string('surname'); //Campo cognome
             $table->string('email'); // Campo email
             $table->text('message'); // Campo testo per il messaggio
             $table->timestamps();

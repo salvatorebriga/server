@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('apartment_id');
             $table->unsignedBigInteger('sponsor_id');
-            $table->dateTimeTz('expir');
-            $table->timestamps('expiration date');
+            $table->dateTimeTz('expiration_date');
+            $table->timestamps();
 
             // Definire le chiavi esterne
             $table->foreign('apartment_id')->references('id')->on('apartments')->onDelete('cascade');

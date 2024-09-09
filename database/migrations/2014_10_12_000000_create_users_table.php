@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('surname');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->date('date_of_birth');
-            $table->boolean('have_apartment')->default(false); // Nuova colonna booleano
             $table->rememberToken();
             $table->timestamps();
         });

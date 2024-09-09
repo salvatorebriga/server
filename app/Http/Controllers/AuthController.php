@@ -15,20 +15,25 @@ class AuthController extends Controller
         // validate register input
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users', //unique password
+            'surname' => 'required|string|max:255',  // Aggiunta la validazione per il cognome
+            'email' => 'required|string|email|max:255|unique:users',
+            'date_of_birth' => 'required|date|before:today',  // Aggiunta la validazione per la data di nascita (deve essere una data passata)
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         // create a new user with hashed password
         $user = User::create([
             'name' => $request->name,
+            'surname' => $request->surname,  // Aggiunto il cognome
             'email' => $request->email,
+            'date_of_birth' => $request->date_of_birth,  // Aggiunta la data di nascita
             'password' => Hash::make($request->password),
         ]);
 
         // response
         return response()->json(['message' => 'User registered successfully!'], 201);
     }
+
 
     //Login
     public function login(Request $request)

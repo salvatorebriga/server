@@ -17,7 +17,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',  // Aggiunta la validazione per il cognome
             'email' => 'required|string|email|max:255|unique:users',
-            'birthdate' => 'required|date|before:today',  // Aggiunta la validazione per la data di nascita (deve essere una data passata)
+            'date_of_birth' => 'required|date|before:today',  // Aggiunta la validazione per la data di nascita (deve essere una data passata)
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -26,7 +26,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'surname' => $request->surname,  // Aggiunto il cognome
             'email' => $request->email,
-            'date_of_birth' => $request->birthdate,  // Aggiunta la data di nascita
+            'date_of_birth' => $request->date_of_birth,  // Aggiunta la data di nascita
             'password' => Hash::make($request->password),
         ]);
 

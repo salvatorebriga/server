@@ -14,19 +14,19 @@ return new class extends Migration
         Schema::create('apartments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('sponsor_id')->nullable(); // Deve essere nullable per onDelete('set null')
-            $table->string('title');
+            $table->string('title', 250);
             $table->string('img')->nullable();
+            $table->string('address', 100)->nullable();
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->integer('rooms');
-            $table->integer('beds');
-            $table->integer('bathrooms');
-            $table->integer('mq');
+            $table->unsignedTinyInteger('rooms');
+            $table->unsignedTinyInteger('beds');
+            $table->unsignedTinyInteger('bathrooms');
+            $table->unsignedSmallInteger('mq');
+            $table->boolean('is_avaible');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('sponsor_id')->references('id')->on('sponsors')->onDelete('set null');
         });
     }
 

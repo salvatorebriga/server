@@ -14,8 +14,8 @@ class ApartmentsController extends Controller
      */
     public function index()
     {
-        //Recupero tutti gli appartamenti dal database
-        $apartments = Apartment::all();
+        //Recupero tutti gli appartamenti collegati all'utente loggato
+        $apartments = Apartment::where('user_id', auth()->id())->get();
 
         //Passa gli appartamenti 
         return view('auth.apartments.index', compact('apartments'));
@@ -56,12 +56,12 @@ class ApartmentsController extends Controller
         $apartment->img = $request->file('img') ? $request->file('img')->store('images', 'public') : null;
         $apartment->address = $validated['address'];
         $apartment->latitude = $validated['latitude'];
-        $apartment->longitude =$validated['longitude'];
-        $apartment->rooms= $validated['rooms'];
-        $apartment->beds= $validated['beds'];
-        $apartment->bathrooms= $validated['bathrooms'];
-        $apartment->mq= $validated['mq'];
-        $apartment->is_avaible= $validated['is_avaible'];
+        $apartment->longitude = $validated['longitude'];
+        $apartment->rooms = $validated['rooms'];
+        $apartment->beds = $validated['beds'];
+        $apartment->bathrooms = $validated['bathrooms'];
+        $apartment->mq = $validated['mq'];
+        $apartment->is_avaible = $validated['is_avaible'];
 
         //Salvare nuovo appartamento
 
@@ -71,7 +71,6 @@ class ApartmentsController extends Controller
         //Apartment::create($request->all()); Questa riga di codice convalida tutto il codice scritto dopo la validazione($valitated=$request->valitated[ecc..])
 
         return redirect()->route('apartments.index')->with('success', 'Appartamento creato con successo');
-
     }
 
     /**
@@ -92,10 +91,10 @@ class ApartmentsController extends Controller
     public function edit(int $id)
     {
         // Recupera l'appartamento dal database utilizzando l'ID
-    $apartment = Apartment::findOrFail($id);
+        $apartment = Apartment::findOrFail($id);
 
-    // Passa i dati dell'appartamento alla vista 'edit'
-    return view('apartments.edit', compact('apartment'));
+        // Passa i dati dell'appartamento alla vista 'edit'
+        return view('apartments.edit', compact('apartment'));
     }
 
     /**
@@ -104,47 +103,47 @@ class ApartmentsController extends Controller
     public function update(Request $request, int $id)
     {
         // Validazione dei dati
-    $validated = $request->validate([
-        'title' => 'required|max:250',
-        'img' => 'nullable|image',
-        'address' => 'required|max:100',
-        'latitude' => 'required|numeric|between:-90,90',
-        'longitude' => 'required|numeric|between:-180,180',
-        'rooms' => 'required|integer|min:1',
-        'beds' => 'required|integer|min:1',
-        'bathrooms' => 'required|integer|min:1',
-        'mq' => 'required|integer|min:1',
-        'is_avaible' => 'required|boolean',
-    ]);
+        $validated = $request->validate([
+            'title' => 'required|max:250',
+            'img' => 'nullable|image',
+            'address' => 'required|max:100',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+            'rooms' => 'required|integer|min:1',
+            'beds' => 'required|integer|min:1',
+            'bathrooms' => 'required|integer|min:1',
+            'mq' => 'required|integer|min:1',
+            'is_avaible' => 'required|boolean',
+        ]);
 
-    // Trova l'appartamento da aggiornare
-    $apartment = Apartment::findOrFail($id);
+        // Trova l'appartamento da aggiornare
+        $apartment = Apartment::findOrFail($id);
 
-    // Aggiorna i dati dell'appartamento
-    $apartment->title = $validated['title'];
-    $apartment->address = $validated['address'];
-    $apartment->latitude = $validated['latitude'];
-    $apartment->longitude = $validated['longitude'];
-    $apartment->rooms = $validated['rooms'];
-    $apartment->beds = $validated['beds'];
-    $apartment->bathrooms = $validated['bathrooms'];
-    $apartment->mq = $validated['mq'];
-    $apartment->is_avaible = $validated['is_avaible'];
+        // Aggiorna i dati dell'appartamento
+        $apartment->title = $validated['title'];
+        $apartment->address = $validated['address'];
+        $apartment->latitude = $validated['latitude'];
+        $apartment->longitude = $validated['longitude'];
+        $apartment->rooms = $validated['rooms'];
+        $apartment->beds = $validated['beds'];
+        $apartment->bathrooms = $validated['bathrooms'];
+        $apartment->mq = $validated['mq'];
+        $apartment->is_avaible = $validated['is_avaible'];
 
-    // Gestione dell'immagine
-    if ($request->hasFile('img')) {
-        // Elimina l'immagine esistente se presente
-        if ($apartment->img) {
-            Storage::disk('public')->delete($apartment->img);
+        // Gestione dell'immagine
+        if ($request->hasFile('img')) {
+            // Elimina l'immagine esistente se presente
+            if ($apartment->img) {
+                Storage::disk('public')->delete($apartment->img);
+            }
+            // Salva la nuova immagine
+            $apartment->img = $request->file('img')->store('images', 'public');
         }
-        // Salva la nuova immagine
-        $apartment->img = $request->file('img')->store('images', 'public');
-    }
 
-    // Salva le modifiche
-    $apartment->save();
+        // Salva le modifiche
+        $apartment->save();
 
-    return redirect()->route('apartments.index')->with('success', 'Appartamento aggiornato con successo');
+        return redirect()->route('apartments.index')->with('success', 'Appartamento aggiornato con successo');
     }
 
     /**
@@ -153,17 +152,16 @@ class ApartmentsController extends Controller
     public function destroy(int $id)
     {
         // Trova l'appartamento da eliminare
-    $apartment = Apartment::findOrFail($id);
+        $apartment = Apartment::findOrFail($id);
 
-    // Elimina l'immagine associata se presente
-    if ($apartment->img) {
-        Storage::disk('public')->delete($apartment->img);
-    }
+        // Elimina l'immagine associata se presente
+        if ($apartment->img) {
+            Storage::disk('public')->delete($apartment->img);
+        }
 
-    // Elimina l'appartamento dal database
-    $apartment->delete();
+        // Elimina l'appartamento dal database
+        $apartment->delete();
 
-    return redirect()->route('apartments.index')->with('success', 'Appartamento eliminato con successo');
-
+        return redirect()->route('apartments.index')->with('success', 'Appartamento eliminato con successo');
     }
 }

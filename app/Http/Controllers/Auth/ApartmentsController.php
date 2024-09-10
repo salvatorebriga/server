@@ -101,7 +101,7 @@ class ApartmentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
         // Validazione dei dati
     $validated = $request->validate([
@@ -150,7 +150,7 @@ class ApartmentsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
         // Trova l'appartamento da eliminare
     $apartment = Apartment::findOrFail($id);
@@ -164,6 +164,6 @@ class ApartmentsController extends Controller
     $apartment->delete();
 
     return redirect()->route('apartments.index')->with('success', 'Appartamento eliminato con successo');
-    
+
     }
 }

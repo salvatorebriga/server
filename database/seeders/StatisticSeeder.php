@@ -12,6 +12,6 @@ class StatisticSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        
     }
 }

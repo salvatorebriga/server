@@ -24,10 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-// Rotte CRUD per la gestione degli appartamenti, accessibili solo agli utenti autenticati
-Route::middleware('auth')->group(function () {
     Route::resource('apartments', ApartmentsController::class);
 });
 

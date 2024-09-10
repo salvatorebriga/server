@@ -19,7 +19,7 @@
 
                 <!-- My Apartments -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('apartments.index')" :active="request()->routeIs('apartments.index')">
+                    <x-nav-link :href="route('apartments.index')" :active="request()->routeIs('apartments.*')">
                         {{ __('My apartments') }}
                     </x-nav-link>
                 </div>

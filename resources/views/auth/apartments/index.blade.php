@@ -12,7 +12,9 @@
           <!-- Image -->
           <div class="relative">
             @if ($apartment->img)
-              <img class="w-full h-48 object-cover object-center" src="{{ '' }}" alt="{{ $apartment->title }}">
+              <img class="w-full h-48 object-cover object-center"
+                src="{{ 'https://images1.apartments.com/i2/mWiO3cfNJl4j2fiV6NrgaQdRQ99Zz10uknoBHKFPHlM/117/the-everett-gahanna-gahanna-oh-building-photo.jpg?p=1' }}"
+                alt="{{ $apartment->title }}">
             @else
               <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
                 <span class="text-gray-500">No Image</span>

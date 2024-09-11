@@ -73,11 +73,11 @@
                 </div>
                 <!-- Availability -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-400" for="is_avaible">Available</label>
-                    <select class="w-full mt-2 p-2 border rounded-lg" name="is_avaible" id="is_avaible" required>
+                    <label class="block text-gray-700 dark:text-gray-400" for="is_available">Available</label>
+                    <select class="w-full mt-2 p-2 border rounded-lg" name="is_available" id="is_available" required>
                         <option value="" disabled selected>Select availability</option>
-                        <option value="1" {{ old('is_avaible') == '1' ? 'selected' : '' }}>Yes</option>
-                        <option value="0" {{ old('is_avaible') == '0' ? 'selected' : '' }}>No</option>
+                        <option value="1" {{ old('is_available') == '1' ? 'selected' : '' }}>Yes</option>
+                        <option value="0" {{ old('is_available') == '0' ? 'selected' : '' }}>No</option>
                     </select>
                 </div>
 

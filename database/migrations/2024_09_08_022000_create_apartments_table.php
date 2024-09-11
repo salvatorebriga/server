@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('beds');
             $table->unsignedTinyInteger('bathrooms');
             $table->unsignedSmallInteger('mq');
-            $table->boolean('is_avaible');
+            $table->boolean('is_available');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

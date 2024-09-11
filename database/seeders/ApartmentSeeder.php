@@ -13,7 +13,7 @@ class ApartmentSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
-        // Truncate la tabella 'services'
+        // Truncate la tabella 'apartments'
         DB::table('apartments')->truncate();
         $apartments = [
             [
@@ -27,7 +27,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 4,
                 'bathrooms' => 3,
                 'mq' => 250,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 2,
@@ -40,7 +40,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 1,
                 'bathrooms' => 1,
                 'mq' => 45,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 3,
@@ -53,7 +53,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 3,
                 'bathrooms' => 2,
                 'mq' => 180,
-                'is_avaible' => false,
+                'is_available' => false,
             ],
             [
                 'user_id' => 4,
@@ -66,7 +66,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 2,
                 'bathrooms' => 1,
                 'mq' => 85,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 5,
@@ -79,7 +79,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 2,
                 'bathrooms' => 2,
                 'mq' => 120,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 6,
@@ -92,7 +92,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 2,
                 'bathrooms' => 2,
                 'mq' => 100,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 7,
@@ -105,7 +105,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 3,
                 'bathrooms' => 2,
                 'mq' => 150,
-                'is_avaible' => false,
+                'is_available' => false,
             ],
             [
                 'user_id' => 8,
@@ -118,7 +118,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 1,
                 'bathrooms' => 1,
                 'mq' => 70,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 9,
@@ -131,7 +131,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 3,
                 'bathrooms' => 3,
                 'mq' => 200,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 10,
@@ -144,7 +144,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 1,
                 'bathrooms' => 1,
                 'mq' => 50,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 11,
@@ -157,7 +157,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 2,
                 'bathrooms' => 2,
                 'mq' => 110,
-                'is_avaible' => false,
+                'is_available' => false,
             ],
             [
                 'user_id' => 12,
@@ -170,7 +170,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 1,
                 'bathrooms' => 1,
                 'mq' => 55,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 13,
@@ -183,7 +183,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 2,
                 'bathrooms' => 2,
                 'mq' => 125,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 14,
@@ -196,7 +196,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 1,
                 'bathrooms' => 1,
                 'mq' => 60,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 15,
@@ -209,7 +209,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 3,
                 'bathrooms' => 3,
                 'mq' => 220,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 16,
@@ -222,7 +222,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 2,
                 'bathrooms' => 1,
                 'mq' => 80,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 17,
@@ -235,7 +235,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 2,
                 'bathrooms' => 2,
                 'mq' => 140,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 18,
@@ -248,7 +248,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 2,
                 'bathrooms' => 1,
                 'mq' => 95,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
             [
                 'user_id' => 19,
@@ -261,7 +261,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 3,
                 'bathrooms' => 2,
                 'mq' => 180,
-                'is_avaible' => false,
+                'is_available' => false,
             ],
             [
                 'user_id' => 20,
@@ -274,7 +274,7 @@ class ApartmentSeeder extends Seeder
                 'beds' => 1,
                 'bathrooms' => 1,
                 'mq' => 65,
-                'is_avaible' => true,
+                'is_available' => true,
             ],
         ];
 
@@ -283,6 +283,5 @@ class ApartmentSeeder extends Seeder
         }
 
         Schema::enableForeignKeyConstraints();
-
     }
 }

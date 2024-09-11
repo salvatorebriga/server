@@ -46,8 +46,8 @@ class ApartmentsController extends Controller
                 'title' => 'required|max:250',
                 'img' => 'nullable|image',
                 'address' => 'required|max:100',
-                'latitude' => 'nullable|numeric|between:-90,90',
-                'longitude' => 'nullable|numeric|between:-180,180',
+                // 'latitude' => 'nullable|numeric|between:-90,90',
+                // 'longitude' => 'nullable|numeric|between:-180,180',
                 'rooms' => 'required|integer|min:1',
                 'beds' => 'required|integer|min:1',
                 'bathrooms' => 'required|integer|min:1',
@@ -62,8 +62,8 @@ class ApartmentsController extends Controller
             $apartment->title = $validated['title'];
             $apartment->img = $request->file('img') ? $request->file('img')->store('images', 'public') : null;
             $apartment->address = $validated['address'];
-            $apartment->latitude = $validated['latitude'];
-            $apartment->longitude = $validated['longitude'];
+            // $apartment->latitude = $validated['latitude'];
+            // $apartment->longitude = $validated['longitude'];
             $apartment->rooms = $validated['rooms'];
             $apartment->beds = $validated['beds'];
             $apartment->bathrooms = $validated['bathrooms'];
@@ -127,8 +127,8 @@ class ApartmentsController extends Controller
             'title' => 'required|max:250',
             'img' => 'nullable|image',
             'address' => 'required|max:100',
-            'latitude' => 'nullable|numeric|between:-90,90',
-            'longitude' => 'nullable|numeric|between:-180,180',
+            // 'latitude' => 'nullable|numeric|between:-90,90',
+            // 'longitude' => 'nullable|numeric|between:-180,180',
             'rooms' => 'required|integer|min:1',
             'beds' => 'required|integer|min:1',
             'bathrooms' => 'required|integer|min:1',
@@ -143,8 +143,8 @@ class ApartmentsController extends Controller
         // Aggiorna i dati dell'appartamento
         $apartment->title = $validated['title'];
         $apartment->address = $validated['address'];
-        $apartment->latitude = $validated['latitude'];
-        $apartment->longitude = $validated['longitude'];
+        // $apartment->latitude = $validated['latitude'];
+        // $apartment->longitude = $validated['longitude'];
         $apartment->rooms = $validated['rooms'];
         $apartment->beds = $validated['beds'];
         $apartment->bathrooms = $validated['bathrooms'];

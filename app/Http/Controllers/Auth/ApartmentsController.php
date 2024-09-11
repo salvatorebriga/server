@@ -50,7 +50,7 @@ class ApartmentsController extends Controller
                 'beds' => 'required|integer|min:1',
                 'bathrooms' => 'required|integer|min:1',
                 'mq' => 'required|integer|min:1',
-                'is_avaible' => 'required|boolean',
+                'is_available' => 'required|boolean',
             ]);
 
             //Creazuione nuovo appartamento
@@ -65,7 +65,7 @@ class ApartmentsController extends Controller
             $apartment->beds = $validated['beds'];
             $apartment->bathrooms = $validated['bathrooms'];
             $apartment->mq = $validated['mq'];
-            $apartment->is_avaible = $validated['is_avaible'] == '1'; // Converte '1' in true e '0' in false
+            $apartment->is_available = $validated['is_available'] == '1'; // Converte '1' in true e '0' in false
 
 
             //Salvare nuovo appartamento
@@ -123,7 +123,7 @@ class ApartmentsController extends Controller
             'beds' => 'required|integer|min:1',
             'bathrooms' => 'required|integer|min:1',
             'mq' => 'required|integer|min:1',
-            'is_avaible' => 'required|boolean',
+            'is_available' => 'required|boolean',
         ]);
 
         // Trova l'appartamento da aggiornare
@@ -138,7 +138,7 @@ class ApartmentsController extends Controller
         $apartment->beds = $validated['beds'];
         $apartment->bathrooms = $validated['bathrooms'];
         $apartment->mq = $validated['mq'];
-        $apartment->is_avaible = $validated['is_avaible'];
+        $apartment->is_available = $validated['is_available'];
 
         // Gestione dell'immagine
         if ($request->hasFile('img')) {

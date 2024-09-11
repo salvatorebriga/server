@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        // Truncate la tabella 'services'
+        // Truncate la tabella 'users'
         DB::table('users')->truncate();
 
         // Carica i dati dal file JSON

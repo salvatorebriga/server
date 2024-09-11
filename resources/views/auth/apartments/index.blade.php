@@ -1,8 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            My Apartments
-        </h2>
+        <div class="flex justify-between">
+            <div class="max-w-4xl">
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    My Apartments
+                </h2>
+            </div>
+            <div class="max-w-3xl">
+                <a href="{{ route('apartments.create') }}"
+                    class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                    + Create New Apartment
+                </a>
+            </div>
+        </div>
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 py-12">

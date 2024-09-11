@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('title', 250);
             $table->string('img')->nullable();
             $table->string('address', 100)->nullable();
-            $table->decimal('latitude', 10, 7);
-            $table->decimal('longitude', 10, 7);
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
             $table->unsignedTinyInteger('rooms');
             $table->unsignedTinyInteger('beds');
             $table->unsignedTinyInteger('bathrooms');

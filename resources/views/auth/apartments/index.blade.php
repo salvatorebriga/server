@@ -6,12 +6,6 @@
                     My Apartments
                 </h2>
             </div>
-            <div class="max-w-3xl">
-                <a href="{{ route('apartments.create') }}"
-                    class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                    + Create New Apartment
-                </a>
-            </div>
         </div>
     </x-slot>
 

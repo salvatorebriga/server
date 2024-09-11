@@ -19,7 +19,7 @@ class ApartmentSeeder extends Seeder
             [
                 'user_id' => 1,
                 'title' => 'Luxury Penthouse in Manhattan',
-                'img' => 'https://source.unsplash.com/1600x900/?luxury,house',
+                'img' => 'images/NiEQf42Lvx7DOU6mQ2J3D23HvGr1YdC2VLLSsDuB.jpg',
                 'address' => '123 Park Ave, New York, NY',
                 'latitude' => 40.7624,
                 'longitude' => -73.9738,
@@ -32,7 +32,7 @@ class ApartmentSeeder extends Seeder
             [
                 'user_id' => 2,
                 'title' => 'Modern Studio in Brooklyn',
-                'img' => 'https://source.unsplash.com/1600x900/?studio,house',
+                'img' => 'images/NiEQf42Lvx7DOU6mQ2J3D23HvGr1YdC2VLLSsDuB.jpg',
                 'address' => '456 Flatbush Ave, Brooklyn, NY',
                 'latitude' => 40.661,
                 'longitude' => -73.9626,
@@ -45,7 +45,7 @@ class ApartmentSeeder extends Seeder
             [
                 'user_id' => 3,
                 'title' => 'Spacious Family Home in Queens',
-                'img' => 'https://source.unsplash.com/1600x900/?family,house',
+                'img' => 'images/NiEQf42Lvx7DOU6mQ2J3D23HvGr1YdC2VLLSsDuB.jpg',
                 'address' => '789 Queens Blvd, Queens, NY',
                 'latitude' => 40.7342,
                 'longitude' => -73.8702,

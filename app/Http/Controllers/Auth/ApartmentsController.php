@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Apartment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class ApartmentsController extends Controller
 {
@@ -35,42 +37,50 @@ class ApartmentsController extends Controller
      */
     public function store(Request $request)
     {
-        //Validazione dati
-        $validated = $request->validate([
-            'title' => 'required|max:250',
-            'img' => 'nullable|image',
-            'address' => 'required|max:100',
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
-            'rooms' => 'required|integer|min:1',
-            'beds' => 'required|integer|min:1',
-            'bathrooms' => 'required|integer|min:1',
-            'mq' => 'required|integer|min:1',
-            'is_avaible' => 'required|boolean',
-        ]);
+        try {
 
-        //Creazuione nuovo appartamento
-        $apartment = new Apartment();
-        $apartment->user_id = auth()->id(); //Associa l appartamento all utente loggato
-        $apartment->title = $validated['title'];
-        $apartment->img = $request->file('img') ? $request->file('img')->store('images', 'public') : null;
-        $apartment->address = $validated['address'];
-        $apartment->latitude = $validated['latitude'];
-        $apartment->longitude = $validated['longitude'];
-        $apartment->rooms = $validated['rooms'];
-        $apartment->beds = $validated['beds'];
-        $apartment->bathrooms = $validated['bathrooms'];
-        $apartment->mq = $validated['mq'];
-        $apartment->is_avaible = $validated['is_avaible'];
+            //Validazione dati
+            $validated = $request->validate([
+                'title' => 'required|max:250',
+                'img' => 'nullable|image',
+                'address' => 'required|max:100',
+                'latitude' => 'nullable|numeric|between:-90,90',
+                'longitude' => 'nullable|numeric|between:-180,180',
+                'rooms' => 'required|integer|min:1',
+                'beds' => 'required|integer|min:1',
+                'bathrooms' => 'required|integer|min:1',
+                'mq' => 'required|integer|min:1',
+                'is_avaible' => 'required|boolean',
+            ]);
 
-        //Salvare nuovo appartamento
+            //Creazuione nuovo appartamento
+            $apartment = new Apartment();
+            $apartment->user_id = auth()->id(); //Associa l appartamento all utente loggato
+            $apartment->title = $validated['title'];
+            $apartment->img = $request->file('img') ? $request->file('img')->store('images', 'public') : null;
+            $apartment->address = $validated['address'];
+            $apartment->latitude = $validated['latitude'];
+            $apartment->longitude = $validated['longitude'];
+            $apartment->rooms = $validated['rooms'];
+            $apartment->beds = $validated['beds'];
+            $apartment->bathrooms = $validated['bathrooms'];
+            $apartment->mq = $validated['mq'];
+            $apartment->is_avaible = $validated['is_avaible'] == '1'; // Converte '1' in true e '0' in false
 
-        $apartment->save();
 
-        //Metodo sintetico con le fillable dichiarate nel model
-        //Apartment::create($request->all()); Questa riga di codice convalida tutto il codice scritto dopo la validazione($valitated=$request->valitated[ecc..])
+            //Salvare nuovo appartamento
 
-        return redirect()->route('apartments.index')->with('success', 'Appartamento creato con successo');
+            $apartment->save();
+
+            //Metodo sintetico con le fillable dichiarate nel model
+            //Apartment::create($request->all()); Questa riga di codice convalida tutto il codice scritto dopo la validazione($valitated=$request->valitated[ecc..])
+
+            return redirect()->route('apartments.index')->with('success', 'Appartamento creato con successo');
+        } catch (\Exception $e) {
+            // Log dell'errore
+            Log::error('Error creating apartment: ' . $e->getMessage());
+            return redirect()->back()->withErrors('Si è verificato un errore durante la creazione dell\'appartamento.');
+        }
     }
 
     /**

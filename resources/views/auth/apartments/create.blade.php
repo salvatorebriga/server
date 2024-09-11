@@ -12,22 +12,26 @@
                 @csrf
                 <!-- Title -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-400" for="title">Title</label>
-                    <input class="w-full mt-2 p-2 border rounded-lg" type="text" name="title" id="title"
-                        value="{{ old('title') }}" required>
+                    <x-input-label for="title" :value="__('Title')" />
+                    <x-text-input id="name" class="block mt-1 w-full" type="text" name="title"
+                        :value="old('name')" required autofocus />
+
                 </div>
 
                 <!-- Address -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-400" for="address">Address</label>
-                    <input class="w-full mt-2 p-2 border rounded-lg" type="text" name="address" id="address"
-                        value="{{ old('address') }}" required>
+                    <x-input-label for="address" :value="__('Address')" />
+                    <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"
+                        :value="old('address')" required autofocus />
+
                 </div>
 
                 <!-- Image -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-400" for="img">Image</label>
-                    <input class="w-full mt-2 p-2" type="file" name="img" id="img">
+                    <x-input-label for="img" :value="__('Image')" />
+                    <input type="file" name="img" id="img"
+                        class="block w-full border border-gray-300 shadow-sm rounded-lg text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:border-gray-700 dark:text-neutral-300 file:bg-indigo-600 file:text-white file:border-0 file:me-4 file:py-3 file:px-4 dark:file:bg-indigo-600 dark:file:text-white">
+
                 </div>
 
                 <!-- Latitude and Longitude -->
@@ -47,28 +51,32 @@
                 <!-- Rooms, Beds, and Bathrooms -->
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-400" for="rooms">Mq</label>
-                        <input class="w-full mt-2 p-2 border rounded-lg"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="mq" id="mq"
-                            value="{{ old('mq') }}" required>
+                        <x-input-label for="mq" :value="__('Mq')" />
+                        <x-text-input id="mq" class="block mt-1 w-full"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="mq" :value="old('mq')"
+                            required autofocus />
+
                     </div>
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-400" for="rooms">Rooms</label>
-                        <input class="w-full mt-2 p-2 border rounded-lg"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="rooms" id="rooms"
-                            value="{{ old('rooms') }}" required>
+                        <x-input-label for="rooms" :value="__('Rooms')" />
+                        <x-text-input id="rooms" class="block mt-1 w-full"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="rooms" :value="old('rooms')"
+                            required autofocus />
+
                     </div>
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-400" for="beds">Beds</label>
-                        <input class="w-full mt-2 p-2 border rounded-lg"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="beds" id="beds"
-                            value="{{ old('beds') }}" required>
+                        <x-input-label for="beds" :value="__('Beds')" />
+                        <x-text-input id="beds" class="block mt-1 w-full"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="beds" :value="old('beds')"
+                            required autofocus />
+
                     </div>
                     <div>
-                        <label class="block text-gray-700 dark:text-gray-400" for="bathrooms">Bathrooms</label>
-                        <input class="w-full mt-2 p-2 border rounded-lg"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="bathrooms" id="bathrooms"
-                            value="{{ old('bathrooms') }}" required>
+                        <x-input-label for="bathrooms" :value="__('Bathrooms')" />
+                        <x-text-input id="bathrooms" class="block mt-1 w-full"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="bathrooms"
+                            :value="old('bathrooms')" required autofocus />
+
                     </div>
                 </div>
                 <!-- Checkbox per i servizi -->
@@ -77,10 +85,14 @@
                     <div class="grid grid-cols-2 gap-4">
                         @foreach ($services as $service)
                             <div>
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" name="services[]" value="{{ $service->id }}"
+                                <label
+                                    class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
+                                    <input type="checkbox" name="services[]"
+                                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                                        value="{{ $service->id }}"
                                         {{ (is_array(old('services')) && in_array($service->id, old('services'))) || (isset($apartmentServices) && in_array($service->id, $apartmentServices)) ? 'checked' : '' }}>
-                                    <span class="ml-2">{{ $service->name }}</span>
+                                    <span
+                                        class="text-sm text-gray-500 ms-3 dark:text-neutral-400">{{ $service->name }}</span>
                                 </label>
                             </div>
                         @endforeach
@@ -89,12 +101,15 @@
 
                 <!-- Availability -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-400" for="is_available">Available</label>
-                    <select class="w-full mt-2 p-2 border rounded-lg" name="is_available" id="is_available" required>
+                    <x-input-label for="is_available" :value="__('Available')" />
+                    <select
+                        class=" px-4 pe-9 block w-full border-gray-300 rounded-lg text-sm focus:border-indigo-500  focus:ring-indigo-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:placeholder-neutral-500 dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
+                        name="is_available" id="is_available" required>
                         <option value="" disabled selected>Select availability</option>
                         <option value="1" {{ old('is_available') == '1' ? 'selected' : '' }}>Yes</option>
                         <option value="0" {{ old('is_available') == '0' ? 'selected' : '' }}>No</option>
                     </select>
+
                 </div>
 
 

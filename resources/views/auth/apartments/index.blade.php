@@ -62,7 +62,7 @@
                 <!-- Show button -->
                 <a href="{{ route('apartments.show', $apartment->id) }}"
                   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                  Show
+                  Details
                 </a>
 
                 <!-- Destroy button with confirmation -->

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title', 250);
             $table->string('img')->nullable();
-            $table->string('address', 100)->nullable();
+            $table->string('address', 100);
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
             $table->unsignedTinyInteger('rooms');

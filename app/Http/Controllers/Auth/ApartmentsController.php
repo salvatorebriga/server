@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Apartment;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -29,7 +30,8 @@ class ApartmentsController extends Controller
     public function create()
     {
         //Form creazione
-        return view('auth.apartments.create');
+        $services = Service::all();
+        return view('auth.apartments.create', compact('services'));
     }
 
     /**
@@ -51,6 +53,7 @@ class ApartmentsController extends Controller
                 'bathrooms' => 'required|integer|min:1',
                 'mq' => 'required|integer|min:1',
                 'is_available' => 'required|boolean',
+                'services' => 'nullable|array|exists:services,id',
             ]);
 
             //Creazuione nuovo appartamento
@@ -74,6 +77,11 @@ class ApartmentsController extends Controller
 
             //Metodo sintetico con le fillable dichiarate nel model
             //Apartment::create($request->all()); Questa riga di codice convalida tutto il codice scritto dopo la validazione($valitated=$request->valitated[ecc..])
+
+            // Associa i servizi selezionati
+            if ($request->has('services')) {
+                $apartment->services()->sync($request->input('services'));
+            }
 
             return redirect()->route('apartments.index')->with('success', 'Appartamento creato con successo');
         } catch (\Exception $e) {
@@ -102,9 +110,11 @@ class ApartmentsController extends Controller
     {
         // Recupera l'appartamento dal database utilizzando l'ID
         $apartment = Apartment::findOrFail($id);
+        $services = Service::all();
 
+        $apartmentServices = $apartment->services->pluck('id')->toArray();
         // Passa i dati dell'appartamento alla vista 'edit'
-        return view('auth.apartments.edit', compact('apartment'));
+        return view('auth.apartments.edit', compact('apartment', 'services', 'apartmentServices'));
     }
 
     /**
@@ -124,6 +134,7 @@ class ApartmentsController extends Controller
             'bathrooms' => 'required|integer|min:1',
             'mq' => 'required|integer|min:1',
             'is_available' => 'required|boolean',
+            'services' => 'nullable|array|exists:services,id',
         ]);
 
         // Trova l'appartamento da aggiornare
@@ -152,6 +163,11 @@ class ApartmentsController extends Controller
 
         // Salva le modifiche
         $apartment->save();
+
+        // Associa i servizi selezionati
+        if ($request->has('services')) {
+            $apartment->services()->sync($request->input('services'));
+        }
 
         return redirect()->route('apartments.index')->with('success', 'Appartamento aggiornato con successo');
     }

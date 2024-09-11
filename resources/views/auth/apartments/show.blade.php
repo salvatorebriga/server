@@ -41,6 +41,22 @@
                 <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Square Meters:</strong> {{ $apartment->mq }} m²
                 </p>
 
+                <!-- Services Section -->
+                <div class="bg-white dark:bg-gray-800 py-2">
+                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Services</h3>
+
+                    @if ($apartment->services->isEmpty())
+                        <p class="text-gray-600 dark:text-gray-400">No services available for this apartment.</p>
+                    @else
+                        <ul class="list-disc list-inside text-gray-700 dark:text-gray-400">
+                            @foreach ($apartment->services as $service)
+                                <li>{{ $service->name }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+
+
                 <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Available:</strong>
                     @if ($apartment->is_avaible)
                         <span class="text-green-500">Yes</span>

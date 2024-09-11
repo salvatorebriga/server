@@ -80,6 +80,22 @@
                     </div>
                 </div>
 
+                <!-- Checkbox per i servizi -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-400 mb-2">Servizi</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        @foreach ($services as $service)
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="services[]" value="{{ $service->id }}"
+                                        {{ (is_array(old('services')) && in_array($service->id, old('services'))) || (isset($apartmentServices) && in_array($service->id, $apartmentServices)) ? 'checked' : '' }}>
+                                    <span class="ml-2">{{ $service->name }}</span>
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
                 <!-- Availability -->
                 <div class="mb-4">
                     <label class="block text-gray-700 dark:text-gray-400" for="is_avaible">Available</label>
@@ -105,7 +121,6 @@
                         Update Apartment
                     </button>
                 </div>
-
             </form>
         </div>
     </div>

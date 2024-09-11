@@ -104,7 +104,7 @@ class ApartmentsController extends Controller
         $apartment = Apartment::findOrFail($id);
 
         // Passa i dati dell'appartamento alla vista 'edit'
-        return view('apartments.edit', compact('apartment'));
+        return view('auth.apartments.edit', compact('apartment'));
     }
 
     /**
@@ -117,8 +117,8 @@ class ApartmentsController extends Controller
             'title' => 'required|max:250',
             'img' => 'nullable|image',
             'address' => 'required|max:100',
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'rooms' => 'required|integer|min:1',
             'beds' => 'required|integer|min:1',
             'bathrooms' => 'required|integer|min:1',

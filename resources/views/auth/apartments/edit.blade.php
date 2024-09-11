@@ -98,13 +98,15 @@
 
                 <!-- Availability -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-400" for="is_avaible">Available</label>
-                    <select class="w-full mt-2 p-2 border rounded-lg" name="is_avaible" id="is_avaible" required>
-                        <option value="" disabled>Select availability</option>
+                    <x-input-label for="is_available" :value="__('Available')" />
+                    <select
+                        class=" px-4 pe-9 block w-full border-gray-300 rounded-lg text-sm focus:border-indigo-500  focus:ring-indigo-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:placeholder-neutral-500 dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
+                        name="is_available" id="is_available" required>
+                        <option value="" disabled selected>Select availability</option>
                         <option value="1"
-                            {{ old('is_avaible', $apartment->is_avaible) == '1' ? 'selected' : '' }}>Yes</option>
+                            {{ old('is_available', $apartment->is_available) == '1' ? 'selected' : '' }}>Yes</option>
                         <option value="0"
-                            {{ old('is_avaible', $apartment->is_avaible) == '0' ? 'selected' : '' }}>No</option>
+                            {{ old('is_available', $apartment->is_available) == '0' ? 'selected' : '' }}>No</option>
                     </select>
                 </div>
 

@@ -4,7 +4,6 @@
             Apartment Details
         </h2>
     </x-slot>
-
     <div class="max-w-7xl mx-auto px-4 py-12">
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 flex">
             <!-- Image Section -->
@@ -57,8 +56,10 @@
                 </div>
 
 
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Available:</strong>
-                    @if ($apartment->is_avaible)
+                <p class="text-gray-700 dark:text-gray-400 mb-2">
+                    <strong>Available:</strong>
+
+                    @if ($apartment->is_available)
                         <span class="text-green-500">Yes</span>
                     @else
                         <span class="text-red-500">No</span>

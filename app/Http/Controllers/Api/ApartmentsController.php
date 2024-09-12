@@ -27,7 +27,7 @@ class ApartmentsController extends Controller
                 'beds' => $apartment->beds,
                 'bathrooms' => $apartment->bathrooms,
                 'mq' => $apartment->mq,
-                'is_avaible' => $apartment->is_avaible,
+                'is_available' => $apartment->is_available,
                 'user' => [
                     'name' => $apartment->user->name,
                     'surname' => $apartment->user->surname,
@@ -56,7 +56,7 @@ class ApartmentsController extends Controller
             'beds' => $apartment->beds,
             'bathrooms' => $apartment->bathrooms,
             'mq' => $apartment->mq,
-            'is_avaible' => $apartment->is_avaible,
+            'is_available' => $apartment->is_available,
             'user' => [
                 'name' => $apartment->user->name,
                 'surname' => $apartment->user->surname,

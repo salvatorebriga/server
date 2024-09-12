@@ -52,19 +52,20 @@ class ApartmentsController extends Controller
                 'is_available' => 'required|boolean',
                 'services' => 'required|min:1|array|exists:services,id',
             ]);
-
             // Chiamata API TomTom Geocode
             $client = new Client(['verify' => false]);
             $apiKey = config('services.tomtom.key');
 
             // Parametri per la geocodifica
             $queryParams = [
-                'query' => $validated['address'], // Usa l'indirizzo completo come query
+                'query' => urlencode($validated['address']), // Usa l'indirizzo completo come query
                 'key' => $apiKey,
             ];
 
+
             // Costruzione dell'URL per la chiamata API TomTom Geocode
-            $url = "https://api.tomtom.com/search/2/geocode.json?" . http_build_query($queryParams);
+
+            $url = 'https://api.tomtom.com/search/2/geocode/' . $queryParams['query'] . '.json?view=Unified&key=' . $queryParams['key'];
 
             // Log dell'URL per debug
             Log::info('TomTom API URL: ' . $url);
@@ -72,7 +73,6 @@ class ApartmentsController extends Controller
             // Esecuzione della richiesta HTTP
             $response = $client->get($url);
             $data = json_decode($response->getBody(), true);
-
             // Controllo della risposta
             if (isset($data['results'][0]['position'])) {
                 $latitude = $data['results'][0]['position']['lat'];

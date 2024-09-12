@@ -20,7 +20,7 @@ class ApartmentsController extends Controller
         // Recupera tutti gli appartamenti collegati all'utente loggato
         $apartments = Apartment::where('user_id', auth()->id())->get();
 
-        // Passa gli appartamenti
+        // Passa gli appartamenti alla vista
         return view('auth.apartments.index', compact('apartments'));
     }
 
@@ -29,7 +29,7 @@ class ApartmentsController extends Controller
      */
     public function create()
     {
-        // Form creazione
+        // Recupera tutti i servizi da mostrare nel form di creazione
         $services = Service::all();
         return view('auth.apartments.create', compact('services'));
     }
@@ -40,52 +40,49 @@ class ApartmentsController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validazione dei dati
+            // Validazione dei dati in ingresso
             $validated = $request->validate([
                 'title' => 'required|max:250',
-                'img' => 'nullable|image',
+                'img' => 'nullable|image', // L'immagine è opzionale ma deve essere un file di tipo immagine
                 'address' => 'required|max:100',
                 'rooms' => 'required|integer|min:1',
                 'beds' => 'required|integer|min:1',
                 'bathrooms' => 'required|integer|min:1',
                 'mq' => 'required|integer|min:1',
                 'is_available' => 'required|boolean',
-                'services' => 'required|min:1|array|exists:services,id',
+                'services' => 'required|min:1|array|exists:services,id', // Verifica che ci sia almeno un servizio selezionato
             ]);
-            // Chiamata API TomTom Geocode
+
+            // Chiamata all'API TomTom per la geocodifica dell'indirizzo
             $client = new Client(['verify' => false]);
             $apiKey = config('services.tomtom.key');
-
-            // Parametri per la geocodifica
             $queryParams = [
-                'query' => urlencode($validated['address']), // Usa l'indirizzo completo come query
+                'query' => urlencode($validated['address']), // Usa l'indirizzo per la geocodifica
                 'key' => $apiKey,
             ];
-
-
-            // Costruzione dell'URL per la chiamata API TomTom Geocode
-
             $url = 'https://api.tomtom.com/search/2/geocode/' . $queryParams['query'] . '.json?view=Unified&key=' . $queryParams['key'];
 
             // Log dell'URL per debug
             Log::info('TomTom API URL: ' . $url);
 
-            // Esecuzione della richiesta HTTP
+            // Esecuzione della richiesta HTTP e decodifica del JSON di risposta
             $response = $client->get($url);
             $data = json_decode($response->getBody(), true);
-            // Controllo della risposta
+
+            // Se la posizione è stata trovata, ottieni latitudine e longitudine
             if (isset($data['results'][0]['position'])) {
                 $latitude = $data['results'][0]['position']['lat'];
                 $longitude = $data['results'][0]['position']['lon'];
             } else {
-                // Errore se l'indirizzo non è stato trovato
+                // Se l'indirizzo non è stato trovato, mostra un messaggio di errore
                 return redirect()->back()->withErrors('Indirizzo non trovato');
             }
 
-            // Creazione del nuovo appartamento
+            // Creazione di un nuovo oggetto Apartment e salvataggio dei dati
             $apartment = new Apartment();
             $apartment->user_id = auth()->id();
             $apartment->title = $validated['title'];
+            // Salvataggio dell'immagine caricata o impostazione a null se non esiste
             $apartment->img = $request->file('img') ? $request->file('img')->store('images', 'public') : null;
             $apartment->address = $validated['address'];
             $apartment->latitude = $latitude;
@@ -96,34 +93,32 @@ class ApartmentsController extends Controller
             $apartment->mq = $validated['mq'];
             $apartment->is_available = (bool) $validated['is_available'];
 
-            // Salvataggio dell'appartamento
+            // Salva il nuovo appartamento
             $apartment->save();
 
-            // Associa i servizi selezionati
+            // Associa i servizi selezionati all'appartamento
             if ($request->has('services')) {
                 $apartment->services()->sync($request->input('services'));
             }
 
+            // Reindirizza l'utente alla lista degli appartamenti con un messaggio di successo
             return redirect()->route('apartments.index')->with('success', 'Appartamento creato con successo');
         } catch (\Exception $e) {
-            // Log dell'errore
+            // Log dell'errore e ritorno alla pagina precedente con un messaggio di errore
             Log::error('Error creating apartment: ' . $e->getMessage());
             return redirect()->back()->withErrors('Si è verificato un errore durante la creazione dell\'appartamento.');
         }
     }
-
-
-
 
     /**
      * Display the specified resource.
      */
     public function show(int $id)
     {
-        // Recupera l'appartamento dal db utilizzando l'id
+        // Recupera l'appartamento dal database tramite l'ID
         $apartment = Apartment::findOrFail($id);
 
-        // Passiamo i dati allo show
+        // Passa i dati dell'appartamento alla vista "show"
         return view('auth.apartments.show', compact('apartment'));
     }
 
@@ -132,12 +127,12 @@ class ApartmentsController extends Controller
      */
     public function edit(int $id)
     {
-        // Recupera l'appartamento dal database utilizzando l'ID
+        // Recupera l'appartamento e i servizi associati per la modifica
         $apartment = Apartment::findOrFail($id);
         $services = Service::all();
-
         $apartmentServices = $apartment->services->pluck('id')->toArray();
-        // Passa i dati dell'appartamento alla vista 'edit'
+
+        // Passa i dati alla vista "edit"
         return view('auth.apartments.edit', compact('apartment', 'services', 'apartmentServices'));
     }
 
@@ -146,26 +141,26 @@ class ApartmentsController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        // Validazione dei dati
+        // Validazione dei dati in ingresso
         $validated = $request->validate([
             'title' => 'required|max:250',
-            'img' => 'nullable|image',
+            'img' => 'nullable|image', // L'immagine è opzionale ma deve essere un file di tipo immagine
             'address' => 'required|max:100',
             'rooms' => 'required|integer|min:1',
             'beds' => 'required|integer|min:1',
             'bathrooms' => 'required|integer|min:1',
             'mq' => 'required|integer|min:1',
             'is_available' => 'required|boolean',
-            'services' => 'required|min:1|array|exists:services,id', // Aggiunto obbligo di minimo un servizio
+            'services' => 'required|min:1|array|exists:services,id', // Verifica che ci sia almeno un servizio selezionato
         ]);
 
         // Trova l'appartamento da aggiornare
         $apartment = Apartment::findOrFail($id);
 
-        // Check se l'indirizzo è cambiato
+        // Verifica se l'indirizzo è stato modificato
         $addressChanged = $apartment->address !== $validated['address'];
 
-        // Aggiorna i dati dell'appartamento
+        // Aggiorna i campi dell'appartamento
         $apartment->title = $validated['title'];
         $apartment->address = $validated['address'];
         $apartment->rooms = $validated['rooms'];
@@ -184,62 +179,51 @@ class ApartmentsController extends Controller
             $apartment->img = $request->file('img')->store('images', 'public');
         }
 
-        // Se l'indirizzo è cambiato, aggiorna latitudine e longitudine
+        // Se l'indirizzo è cambiato, aggiorna latitudine e longitudine tramite l'API TomTom
         if ($addressChanged) {
             try {
-                // Chiamata API TomTom Geocode
+                // Chiamata API TomTom Geocode per aggiornare latitudine e longitudine
                 $client = new Client(['verify' => false]);
                 $apiKey = config('services.tomtom.key');
-
-                // Parametri per la geocodifica
                 $queryParams = [
                     'query' => urlencode($validated['address']),
-                    'limit' => 1,
                     'key' => $apiKey,
                 ];
-
-                // Costruzione dell'URL per la chiamata API TomTom Geocode
-                $url = "https://api.tomtom.com/search/2/geocode.json?" . http_build_query($queryParams);
+                $url = 'https://api.tomtom.com/search/2/geocode/' . $queryParams['query'] . '.json?view=Unified&key=' . $queryParams['key'];
 
                 // Log dell'URL per debug
                 Log::info('TomTom API URL: ' . $url);
 
-                // Esecuzione della richiesta HTTP
+                // Esecuzione della richiesta HTTP e decodifica del JSON di risposta
                 $response = $client->get($url);
                 $data = json_decode($response->getBody(), true);
 
-                // Controllo della risposta
+                // Aggiorna latitudine e longitudine solo se l'indirizzo è valido
                 if (isset($data['results'][0]['position'])) {
-                    $latitude = $data['results'][0]['position']['lat'];
-                    $longitude = $data['results'][0]['position']['lon'];
-
-                    // Aggiorna latitudine e longitudine
-                    $apartment->latitude = $latitude;
-                    $apartment->longitude = $longitude;
+                    $apartment->latitude = $data['results'][0]['position']['lat'];
+                    $apartment->longitude = $data['results'][0]['position']['lon'];
                 } else {
-                    // Errore se l'indirizzo non è stato trovato
+                    // Se l'indirizzo non è stato trovato, ritorna un errore
                     return redirect()->back()->withErrors('Indirizzo non trovato');
                 }
             } catch (\Exception $e) {
-                // Log dell'errore
-                Log::error('Error updating latitude and longitude: ' . $e->getMessage());
-                return redirect()->back()->withErrors('Si è verificato un errore durante l\'aggiornamento della latitudine e longitudine.');
+                // Log dell'errore e ritorno alla pagina precedente con un messaggio di errore
+                Log::error('Error updating apartment coordinates: ' . $e->getMessage());
+                return redirect()->back()->withErrors('Si è verificato un errore durante l\'aggiornamento delle coordinate.');
             }
         }
 
-        // Salva le modifiche
+        // Salva le modifiche all'appartamento
         $apartment->save();
 
-        // Associa i servizi selezionati
+        // Associa i nuovi servizi all'appartamento
         if ($request->has('services')) {
             $apartment->services()->sync($request->input('services'));
-        } else {
-            $apartment->services()->detach(); // Rimuovi tutti i servizi se non specificati
         }
 
+        // Reindirizza l'utente alla lista degli appartamenti con un messaggio di successo
         return redirect()->route('apartments.index')->with('success', 'Appartamento aggiornato con successo');
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -249,7 +233,7 @@ class ApartmentsController extends Controller
         // Trova l'appartamento da eliminare
         $apartment = Apartment::findOrFail($id);
 
-        // Elimina l'immagine associata se presente
+        // Elimina l'immagine associata se esiste
         if ($apartment->img) {
             Storage::disk('public')->delete($apartment->img);
         }
@@ -257,6 +241,7 @@ class ApartmentsController extends Controller
         // Elimina l'appartamento dal database
         $apartment->delete();
 
+        // Reindirizza l'utente alla lista degli appartamenti con un messaggio di successo
         return redirect()->route('apartments.index')->with('success', 'Appartamento eliminato con successo');
     }
 }

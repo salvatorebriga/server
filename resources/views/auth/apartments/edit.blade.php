@@ -27,25 +27,6 @@
                         <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"
                             :value="old('address', $apartment->address)" required />
                     </div>
-                    <div>
-                        <x-input-label for="house_number" :value="__('House Number')" />
-                        <x-text-input id="house_number" class="block mt-1 w-full" type="text" name="house_number"
-                            :value="old('house_number', $apartment->house_number)" required />
-                    </div>
-                </div>
-
-                <!-- Country and Postal Code -->
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <x-input-label for="country" :value="__('Country')" />
-                        <x-text-input id="country" class="block mt-1 w-full" type="text" name="country"
-                            :value="old('country', $apartment->country)" required />
-                    </div>
-                    <div>
-                        <x-input-label for="postal_code" :value="__('Postal Code')" />
-                        <x-text-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code"
-                            :value="old('postal_code', $apartment->postal_code)" required />
-                    </div>
                 </div>
 
                 <!-- Image -->

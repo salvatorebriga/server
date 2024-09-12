@@ -46,9 +46,6 @@
             const themeText = document.getElementById('theme-text');
 
             if (html.classList.contains('dark')) {
-                themeIcon.innerHTML = `<path d="M12 3a9 9 0 000 18c4.2 0 7.8-2.4 9-6a9 9 0 01-9-12z"></path>`;
-                themeText.textContent = '{{ __('Dark Mode') }}';
-            } else {
                 themeIcon.innerHTML = ` <circle cx="12" cy="12" r="4"></circle>
                                         <path d="M12 2v2"></path>
                                         <path d="M12 20v2"></path>
@@ -59,6 +56,9 @@
                                         <path d="m6.34 17.66-1.41 1.41"></path>
                                         <path d="m19.07 4.93-1.41 1.41"></path>`;
                 themeText.textContent = '{{ __('Light Mode') }}';
+            } else {
+                themeIcon.innerHTML = `<path d="M12 3a9 9 0 000 18c4.2 0 7.8-2.4 9-6a9 9 0 01-9-12z"></path>`;
+                themeText.textContent = '{{ __('Dark Mode') }}';
             }
         }
 

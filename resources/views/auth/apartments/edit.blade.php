@@ -20,12 +20,15 @@
                         :value="old('title', $apartment->title)" required />
                 </div>
 
-                <!-- Address and House Number -->
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
+                <!-- Address -->
+                <div class="mb-4">
+                    <div class="relative w-full">
                         <x-input-label for="address" :value="__('Address')" />
                         <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"
-                            :value="old('address', $apartment->address)" required />
+                            :value="old('address', $apartment->address)" oninput="getAutocomplete()" required autofocus />
+                        <ul id="results"
+                            class="absolute w-full bg-white mt-1 rounded-lg shadow-lg overflow-hidden z-10 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300">
+                        </ul>
                     </div>
                 </div>
 
@@ -42,18 +45,6 @@
                         </div>
                     @endif
                 </div>
-
-                <!-- Latitude and Longitude -->
-                {{-- <div class="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <x-input-label for="latitude" :value="__('Latitude')" />
-            <x-text-input id="latitude" class="block mt-1 w-full" type="text" name="latitude" :value="old('latitude', $apartment->latitude)" />
-          </div>
-          <div>
-            <x-input-label for="longitude" :value="__('Longitude')" />
-            <x-text-input id="longitude" class="block mt-1 w-full" type="text" name="longitude" :value="old('longitude', $apartment->longitude)" />
-          </div>
-        </div> --}}
 
                 <!-- Rooms, Beds, and Bathrooms -->
                 <div class="grid grid-cols-2 gap-4 mb-4">

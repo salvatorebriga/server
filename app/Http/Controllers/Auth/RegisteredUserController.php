@@ -30,15 +30,21 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Aggiunta della validazione per surname e date_of_birth
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'surname' => ['required', 'string', 'max:255'], // Validazione per il cognome
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'date_of_birth' => ['required', 'date', 'before:today'], // Validazione per la data di nascita
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Creazione del nuovo utente con surname e date_of_birth
         $user = User::create([
             'name' => $request->name,
+            'surname' => $request->surname, // Aggiungi il cognome
             'email' => $request->email,
+            'date_of_birth' => $request->date_of_birth, // Aggiungi la data di nascita
             'password' => Hash::make($request->password),
         ]);
 

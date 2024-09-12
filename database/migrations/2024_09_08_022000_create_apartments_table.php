@@ -16,9 +16,12 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title', 250);
             $table->string('img')->nullable();
-            $table->string('address', 100);
-            $table->decimal('latitude', 10, 7)->nullable();
-            $table->decimal('longitude', 10, 7)->nullable();
+            $table->string('address', 100); // Nome della via
+            $table->unsignedSmallInteger('house_number'); // Numero civico
+            $table->string('postal_code', 20); // Codice postale
+            $table->char('country', 2); // Codice del paese
+            $table->decimal('latitude', 10, 7)->nullable(); // Latitudine
+            $table->decimal('longitude', 10, 7)->nullable(); // Longitudine
             $table->unsignedTinyInteger('rooms');
             $table->unsignedTinyInteger('beds');
             $table->unsignedTinyInteger('bathrooms');
@@ -26,6 +29,7 @@ return new class extends Migration
             $table->boolean('is_available');
             $table->timestamps();
 
+            // Definizione della relazione con la tabella users
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

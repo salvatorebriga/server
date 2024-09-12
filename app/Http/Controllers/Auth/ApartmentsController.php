@@ -45,34 +45,26 @@ class ApartmentsController extends Controller
                 'title' => 'required|max:250',
                 'img' => 'nullable|image',
                 'address' => 'required|max:100',
-                'house_number' => 'required|integer',
-                'postal_code' => 'required|max:20',
-                'country' => 'required|size:2',
                 'rooms' => 'required|integer|min:1',
                 'beds' => 'required|integer|min:1',
                 'bathrooms' => 'required|integer|min:1',
                 'mq' => 'required|integer|min:1',
                 'is_available' => 'required|boolean',
-                'services' => 'nullable|array|exists:services,id',
+                'services' => 'required|min:1|array|exists:services,id',
             ]);
 
-            // Chiamata API TomTom Structured Geocode
+            // Chiamata API TomTom Geocode
             $client = new Client(['verify' => false]);
             $apiKey = config('services.tomtom.key');
 
-            // Parametri per la geocodifica strutturata
+            // Parametri per la geocodifica
             $queryParams = [
-                'countryCode' => urlencode($validated['country']),
-                'limit' => 1,
-                'streetNumber' => $validated['house_number'],
-                'streetName' => urlencode($validated['address']),
-                'postalCode' => urlencode($validated['postal_code']),
-                'view' => 'Unified',
+                'query' => $validated['address'], // Usa l'indirizzo completo come query
                 'key' => $apiKey,
             ];
 
-            // Costruzione dell'URL per la chiamata API TomTom Structured Geocode
-            $url = "https://api.tomtom.com/search/2/structuredGeocode.json?" . http_build_query($queryParams);
+            // Costruzione dell'URL per la chiamata API TomTom Geocode
+            $url = "https://api.tomtom.com/search/2/geocode.json?" . http_build_query($queryParams);
 
             // Log dell'URL per debug
             Log::info('TomTom API URL: ' . $url);
@@ -96,9 +88,6 @@ class ApartmentsController extends Controller
             $apartment->title = $validated['title'];
             $apartment->img = $request->file('img') ? $request->file('img')->store('images', 'public') : null;
             $apartment->address = $validated['address'];
-            $apartment->house_number = $validated['house_number'];
-            $apartment->postal_code = $validated['postal_code'];
-            $apartment->country = $validated['country'];
             $apartment->latitude = $latitude;
             $apartment->longitude = $longitude;
             $apartment->rooms = $validated['rooms'];
@@ -122,6 +111,7 @@ class ApartmentsController extends Controller
             return redirect()->back()->withErrors('Si è verificato un errore durante la creazione dell\'appartamento.');
         }
     }
+
 
 
 
@@ -161,32 +151,23 @@ class ApartmentsController extends Controller
             'title' => 'required|max:250',
             'img' => 'nullable|image',
             'address' => 'required|max:100',
-            'house_number' => 'required|integer',
-            'postal_code' => 'required|max:20',
-            'country' => 'required|size:2',
             'rooms' => 'required|integer|min:1',
             'beds' => 'required|integer|min:1',
             'bathrooms' => 'required|integer|min:1',
             'mq' => 'required|integer|min:1',
             'is_available' => 'required|boolean',
-            'services' => 'nullable|array|exists:services,id',
+            'services' => 'required|min:1|array|exists:services,id', // Aggiunto obbligo di minimo un servizio
         ]);
 
         // Trova l'appartamento da aggiornare
         $apartment = Apartment::findOrFail($id);
 
-        // Check if address-related fields have changed
-        $addressChanged = $apartment->address !== $validated['address']
-            || $apartment->house_number !== $validated['house_number']
-            || $apartment->postal_code !== $validated['postal_code']
-            || $apartment->country !== $validated['country'];
+        // Check se l'indirizzo è cambiato
+        $addressChanged = $apartment->address !== $validated['address'];
 
         // Aggiorna i dati dell'appartamento
         $apartment->title = $validated['title'];
         $apartment->address = $validated['address'];
-        $apartment->house_number = $validated['house_number'];
-        $apartment->postal_code = $validated['postal_code'];
-        $apartment->country = $validated['country'];
         $apartment->rooms = $validated['rooms'];
         $apartment->beds = $validated['beds'];
         $apartment->bathrooms = $validated['bathrooms'];
@@ -203,26 +184,22 @@ class ApartmentsController extends Controller
             $apartment->img = $request->file('img')->store('images', 'public');
         }
 
-        // Se i dettagli dell'indirizzo sono cambiati, aggiorna la latitudine e longitudine
+        // Se l'indirizzo è cambiato, aggiorna latitudine e longitudine
         if ($addressChanged) {
             try {
-                // Chiamata API TomTom Structured Geocode
+                // Chiamata API TomTom Geocode
                 $client = new Client(['verify' => false]);
                 $apiKey = config('services.tomtom.key');
 
-                // Parametri per la geocodifica strutturata
+                // Parametri per la geocodifica
                 $queryParams = [
-                    'countryCode' => urlencode($validated['country']),
+                    'query' => urlencode($validated['address']),
                     'limit' => 1,
-                    'streetNumber' => $validated['house_number'],
-                    'streetName' => urlencode($validated['address']),
-                    'postalCode' => urlencode($validated['postal_code']),
-                    'view' => 'Unified',
                     'key' => $apiKey,
                 ];
 
-                // Costruzione dell'URL per la chiamata API TomTom Structured Geocode
-                $url = "https://api.tomtom.com/search/2/structuredGeocode.json?" . http_build_query($queryParams);
+                // Costruzione dell'URL per la chiamata API TomTom Geocode
+                $url = "https://api.tomtom.com/search/2/geocode.json?" . http_build_query($queryParams);
 
                 // Log dell'URL per debug
                 Log::info('TomTom API URL: ' . $url);
@@ -256,10 +233,13 @@ class ApartmentsController extends Controller
         // Associa i servizi selezionati
         if ($request->has('services')) {
             $apartment->services()->sync($request->input('services'));
+        } else {
+            $apartment->services()->detach(); // Rimuovi tutti i servizi se non specificati
         }
 
         return redirect()->route('apartments.index')->with('success', 'Appartamento aggiornato con successo');
     }
+
 
     /**
      * Remove the specified resource from storage.

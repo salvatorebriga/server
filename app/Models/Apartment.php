@@ -9,6 +9,14 @@ class Apartment extends Model
 {
     use HasFactory;
 
+    // Relazione many-to-many con Sponsor tramite la tabella pivot apartment_sponsor
+    public function sponsors()
+    {
+        return $this->belongsToMany(Sponsor::class, 'apartment_sponsor', 'apartment_id', 'sponsor_id')
+            ->withPivot('start_date', 'end_date');
+    }
+
+    // Altre relazioni
     public function messages()
     {
         return $this->hasMany(Message::class);
@@ -27,10 +35,5 @@ class Apartment extends Model
     public function services()
     {
         return $this->belongsToMany(Service::class);
-    }
-
-    public function sponsors()
-    {
-        return $this->belongsToMany(Sponsor::class);
     }
 }

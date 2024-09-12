@@ -13,9 +13,13 @@ class ApartmentsController extends Controller
      */
     public function index()
     {
-        $apartments = Apartment::with('user')->get(); // Usa with per includere la relazione
+        // Usa with per includere la relazione con user e sponsors
+        $apartments = Apartment::with(['user', 'sponsors'])->get();
 
+        // Mappa gli appartamenti per strutturare il risultato API
         $apartments = $apartments->map(function ($apartment) {
+            $isSponsored = $apartment->sponsors->isNotEmpty(); // Verifica se ci sono sponsorizzazioni
+
             return [
                 'id' => $apartment->id,
                 'title' => $apartment->title,
@@ -28,10 +32,18 @@ class ApartmentsController extends Controller
                 'bathrooms' => $apartment->bathrooms,
                 'mq' => $apartment->mq,
                 'is_available' => $apartment->is_available,
+                'is_sponsored' => $isSponsored, // Aggiungi questo campo
                 'user' => [
                     'name' => $apartment->user->name,
                     'surname' => $apartment->user->surname,
                 ],
+                // Aggiungi i dati della sponsorizzazione se esistenti
+                'sponsor' => $isSponsored ? [
+                    'type' => $apartment->sponsors->first()->pivot->type,
+                    'time' => $apartment->sponsors->first()->pivot->time,
+                    'start_date' => $apartment->sponsors->first()->pivot->start_date,
+                    'end_date' => $apartment->sponsors->first()->pivot->end_date,
+                ] : null,
             ];
         });
 
@@ -43,8 +55,10 @@ class ApartmentsController extends Controller
      */
     public function show($id)
     {
-        $apartment = Apartment::with('user')->findOrFail($id); // Trova l'appartamento per ID
+        // Trova l'appartamento per ID con la relazione user e sponsors
+        $apartment = Apartment::with(['user', 'sponsors'])->findOrFail($id);
 
+        // Ritorna il singolo appartamento con i dati della sponsorizzazione
         return response()->json([
             'id' => $apartment->id,
             'title' => $apartment->title,
@@ -61,6 +75,13 @@ class ApartmentsController extends Controller
                 'name' => $apartment->user->name,
                 'surname' => $apartment->user->surname,
             ],
+            // Aggiungi i dati della sponsorizzazione se esistenti
+            'sponsor' => $apartment->sponsors->isNotEmpty() ? [
+                'type' => $apartment->sponsors->first()->pivot->type,
+                'time' => $apartment->sponsors->first()->pivot->time,
+                'start_date' => $apartment->sponsors->first()->pivot->start_date,
+                'end_date' => $apartment->sponsors->first()->pivot->end_date,
+            ] : null,
         ]);
     }
 }

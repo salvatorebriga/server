@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('apartment_id');
             $table->unsignedBigInteger('sponsor_id');
-            $table->dateTimeTz('expiration_date');
+            $table->dateTimeTz('start_date'); // Data di inizio della sponsorizzazione
+            $table->dateTimeTz('end_date'); // Data di fine della sponsorizzazione
             $table->timestamps();
 
             // Definire le chiavi esterne

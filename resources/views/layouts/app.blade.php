@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -74,6 +75,45 @@
                 html.classList.add('dark');
             }
             updateThemeIcon();
+        }
+
+        //TomTom Autocomplete
+        function getAutocomplete() {
+            //value dell'input
+            const query = document.getElementById('address').value;
+
+            if (query.length < 4) {
+                document.getElementById('results').innerHTML = '';
+                return;
+            }
+
+            fetch(`/autocomplete?query=${query}`, {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const resultsContainer = document.getElementById('results');
+                    resultsContainer.innerHTML = '';
+
+                    data.forEach(result => {
+                        const li = document.createElement('li');
+                        li.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-100',
+                            'dark:hover:bg-indigo-600');
+                        li.textContent = result.address.freeformAddress;
+                        // Aggiungi event listener per inserire il testo selezionato nell'input
+                        li.addEventListener('click', function() {
+                            document.getElementById('address').value = result.address
+                                .freeformAddress;
+                            resultsContainer.innerHTML = ''; // Pulire la lista dopo aver selezionato
+                        });
+                        resultsContainer.appendChild(li);
+
+                    });
+
+                })
+                .catch(error => console.error('Errore:', error));
         }
     </script>
 </head>

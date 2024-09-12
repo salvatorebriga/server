@@ -20,11 +20,18 @@
                 </div>
 
                 <!-- Address and House Number -->
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
+                <div class="mb-4">
+                    <div class="relative w-full">
                         <x-input-label for="address" :value="__('Address')" />
                         <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"
-                            :value="old('address')" required autofocus />
+                            :value="old('address')" oninput="getAutocomplete()" required autofocus />
+                        <ul id="results"
+                            class="absolute w-full bg-white mt-1 rounded-lg shadow-lg overflow-hidden z-10 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300">
+                        </ul>
+                    </div>
+
+                    {{-- <div>
+                        <x-input-label for="address" :value="__('Address')" />
                     </div>
                     <div>
                         <x-input-label for="house_number" :value="__('House Number')" />
@@ -44,7 +51,7 @@
                         <x-input-label for="postal_code" :value="__('Postal Code')" />
                         <x-text-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code"
                             :value="old('postal_code')" required />
-                    </div>
+                    </div> --}}
                 </div>
 
                 <!-- Image -->

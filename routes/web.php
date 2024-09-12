@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ApartmentsController;
+use App\Http\Controllers\AutocompleteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('apartments', ApartmentsController::class);
 });
+
+//Rotta per l'autocompletamento di TomTom
+Route::get('/autocomplete', [AutocompleteController::class, 'autocomplete']);
 
 // Includi le rotte per l'autenticazione (login, registrazione, ecc.)
 require __DIR__ . '/auth.php';

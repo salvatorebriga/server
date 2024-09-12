@@ -4,6 +4,7 @@
       Apartment Details
     </h2>
   </x-slot>
+
   <div class="max-w-7xl mx-auto px-4 py-12">
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 flex">
       <!-- Image Section -->
@@ -21,23 +22,18 @@
       <div class="w-1/2">
         <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">{{ $apartment->title }}</h3>
 
-        <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Address:</strong> {{ $apartment->address }}</p>
+        <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Address:</strong> {{ $apartment->address }},
+          {{ $apartment->house_number }}, {{ $apartment->postal_code }}, {{ $apartment->country }}</p>
 
-        {{-- <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Latitude:</strong>
-                    {{ $apartment->latitude ?? 'Not provided' }}</p>
-
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Longitude:</strong>
-                    {{ $apartment->longitude ?? 'Not provided' }}</p> --}}
+        <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Latitude:</strong>
+          {{ $apartment->latitude ?? 'Not provided' }}</p>
+        <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Longitude:</strong>
+          {{ $apartment->longitude ?? 'Not provided' }}</p>
 
         <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Rooms:</strong> {{ $apartment->rooms }}</p>
-
         <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Beds:</strong> {{ $apartment->beds }}</p>
-
-        <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Bathrooms:</strong> {{ $apartment->bathrooms }}
-        </p>
-
-        <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Square Meters:</strong> {{ $apartment->mq }} m²
-        </p>
+        <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Bathrooms:</strong> {{ $apartment->bathrooms }}</p>
+        <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Square Meters:</strong> {{ $apartment->mq }} m²</p>
 
         <!-- Services Section -->
         <div class="bg-white dark:bg-gray-800 py-2">
@@ -54,10 +50,8 @@
           @endif
         </div>
 
-
         <p class="text-gray-700 dark:text-gray-400 mb-2">
           <strong>Available:</strong>
-
           @if ($apartment->is_available)
             <span class="text-green-500">Yes</span>
           @else

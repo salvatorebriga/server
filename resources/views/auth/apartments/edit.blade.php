@@ -4,31 +4,55 @@
       Update Apartment
     </h2>
   </x-slot>
+
   @include('shared.errors')
-  {{-- IL FORM DEVE PUNTARE ALL'UPDATE --}}
+
   <div class="max-w-7xl mx-auto px-4 py-12">
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
       <form action="{{ route('apartments.update', $apartment->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+
         <!-- Title -->
         <div class="mb-4">
-          <label class="block text-gray-700 dark:text-gray-400" for="title">Title</label>
-          <input class="w-full mt-2 p-2 border rounded-lg" type="text" name="title" id="title"
-            value="{{ old('title', $apartment->title) }}" required>
+          <x-input-label for="title" :value="__('Title')" />
+          <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $apartment->title)"
+            required />
         </div>
 
-        <!-- Address -->
-        <div class="mb-4">
-          <label class="block text-gray-700 dark:text-gray-400" for="address">Address</label>
-          <input class="w-full mt-2 p-2 border rounded-lg" type="text" name="address" id="address"
-            value="{{ old('address', $apartment->address) }}" required>
+        <!-- Address and House Number -->
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <x-input-label for="address" :value="__('Address')" />
+            <x-text-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address', $apartment->address)"
+              required />
+          </div>
+          <div>
+            <x-input-label for="house_number" :value="__('House Number')" />
+            <x-text-input id="house_number" class="block mt-1 w-full" type="text" name="house_number"
+              :value="old('house_number', $apartment->house_number)" required />
+          </div>
+        </div>
+
+        <!-- Country and Postal Code -->
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <x-input-label for="country" :value="__('Country')" />
+            <x-text-input id="country" class="block mt-1 w-full" type="text" name="country" :value="old('country', $apartment->country)"
+              required />
+          </div>
+          <div>
+            <x-input-label for="postal_code" :value="__('Postal Code')" />
+            <x-text-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code" :value="old('postal_code', $apartment->postal_code)"
+              required />
+          </div>
         </div>
 
         <!-- Image -->
         <div class="mb-4">
-          <label class="block text-gray-700 dark:text-gray-400" for="img">Image</label>
-          <input class="w-full mt-2 p-2" type="file" name="img" id="img">
+          <x-input-label for="img" :value="__('Image')" />
+          <input type="file" name="img" id="img"
+            class="block w-full border border-gray-300 shadow-sm rounded-lg text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:border-gray-700 dark:text-neutral-300 file:bg-indigo-600 file:text-white file:border-0 file:me-4 file:py-3 file:px-4 dark:file:bg-indigo-600 dark:file:text-white">
           @if ($apartment->img)
             <div class="mt-2">
               <img src="{{ asset('storage/' . $apartment->img) }}" alt="{{ $apartment->title }}" class="h-24">
@@ -40,38 +64,36 @@
         <!-- Latitude and Longitude -->
         {{-- <div class="grid grid-cols-2 gap-4 mb-4">
           <div>
-            <label class="block text-gray-700 dark:text-gray-400" for="latitude">Latitude</label>
-            <input class="w-full mt-2 p-2 border rounded-lg" type="text" name="latitude" id="latitude"
-              value="{{ old('latitude', $apartment->latitude) }}">
+            <x-input-label for="latitude" :value="__('Latitude')" />
+            <x-text-input id="latitude" class="block mt-1 w-full" type="text" name="latitude" :value="old('latitude', $apartment->latitude)" />
           </div>
           <div>
-            <label class="block text-gray-700 dark:text-gray-400" for="longitude">Longitude</label>
-            <input class="w-full mt-2 p-2 border rounded-lg" type="text" name="longitude" id="longitude"
-              value="{{ old('longitude', $apartment->longitude) }}">
+            <x-input-label for="longitude" :value="__('Longitude')" />
+            <x-text-input id="longitude" class="block mt-1 w-full" type="text" name="longitude" :value="old('longitude', $apartment->longitude)" />
           </div>
         </div> --}}
 
         <!-- Rooms, Beds, and Bathrooms -->
         <div class="grid grid-cols-3 gap-4 mb-4">
           <div>
-            <label class="block text-gray-700 dark:text-gray-400" for="mq">Mq</label>
-            <input class="w-full mt-2 p-2 border rounded-lg" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-              name="mq" id="mq" value="{{ old('mq', $apartment->mq) }}" required>
+            <x-input-label for="mq" :value="__('Mq')" />
+            <x-text-input id="mq" class="block mt-1 w-full"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="mq" :value="old('mq', $apartment->mq)" required />
           </div>
           <div>
-            <label class="block text-gray-700 dark:text-gray-400" for="rooms">Rooms</label>
-            <input class="w-full mt-2 p-2 border rounded-lg" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-              name="rooms" id="rooms" value="{{ old('rooms', $apartment->rooms) }}" required>
+            <x-input-label for="rooms" :value="__('Rooms')" />
+            <x-text-input id="rooms" class="block mt-1 w-full"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="rooms" :value="old('rooms', $apartment->rooms)" required />
           </div>
           <div>
-            <label class="block text-gray-700 dark:text-gray-400" for="beds">Beds</label>
-            <input class="w-full mt-2 p-2 border rounded-lg" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-              name="beds" id="beds" value="{{ old('beds', $apartment->beds) }}" required>
+            <x-input-label for="beds" :value="__('Beds')" />
+            <x-text-input id="beds" class="block mt-1 w-full"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="beds" :value="old('beds', $apartment->beds)" required />
           </div>
           <div>
-            <label class="block text-gray-700 dark:text-gray-400" for="bathrooms">Bathrooms</label>
-            <input class="w-full mt-2 p-2 border rounded-lg" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-              name="bathrooms" id="bathrooms" value="{{ old('bathrooms', $apartment->bathrooms) }}" required>
+            <x-input-label for="bathrooms" :value="__('Bathrooms')" />
+            <x-text-input id="bathrooms" class="block mt-1 w-full"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="bathrooms" :value="old('bathrooms', $apartment->bathrooms)" required />
           </div>
         </div>
 
@@ -98,9 +120,9 @@
         <div class="mb-4">
           <x-input-label for="is_available" :value="__('Available')" />
           <select
-            class=" px-4 pe-9 block w-full border-gray-300 rounded-lg text-sm focus:border-indigo-500  focus:ring-indigo-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:placeholder-neutral-500 dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
+            class="px-4 pe-9 block w-full border-gray-300 rounded-lg text-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:placeholder-neutral-500 dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
             name="is_available" id="is_available" required>
-            <option value="" disabled selected>Select availability</option>
+            <option value="" disabled>Select availability</option>
             <option value="1" {{ old('is_available', $apartment->is_available) == '1' ? 'selected' : '' }}>Yes
             </option>
             <option value="0" {{ old('is_available', $apartment->is_available) == '0' ? 'selected' : '' }}>No
@@ -108,7 +130,6 @@
           </select>
         </div>
 
-        <!-- Action Buttons -->
         <div class="flex justify-between items-center mt-6">
           <!-- Back Button -->
           <a href="{{ route('apartments.index') }}"

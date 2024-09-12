@@ -17,9 +17,6 @@ return new class extends Migration
             $table->string('title', 250);
             $table->string('img')->nullable();
             $table->string('address', 100); // Nome della via
-            $table->unsignedSmallInteger('house_number'); // Numero civico
-            $table->string('postal_code', 20); // Codice postale
-            $table->char('country', 2); // Codice del paese
             $table->decimal('latitude', 10, 7)->nullable(); // Latitudine
             $table->decimal('longitude', 10, 7)->nullable(); // Longitudine
             $table->unsignedTinyInteger('rooms');

@@ -256,10 +256,7 @@ class ApartmentsController extends Controller
         // Associa i servizi selezionati
         if ($request->has('services')) {
             $apartment->services()->sync($request->input('services'));
-        } else {
-            $apartment->services()->detach();
         }
-
 
         return redirect()->route('apartments.index')->with('success', 'Appartamento aggiornato con successo');
     }

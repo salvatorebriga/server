@@ -14,8 +14,18 @@ use App\Http\Controllers\Auth\ApartmentsController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-// Rotta per la dashboard che richiede autenticazione e verifica dell'email
+
 Route::get('/', function () {
+    return view('auth.register');
+});
+
+Route::get('/login', function () {
+    return view('auth.login');
+});
+
+
+// Rotta per la dashboard che richiede autenticazione e verifica dell'email
+Route::get('/dashboard', function () {
     return view('auth.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 

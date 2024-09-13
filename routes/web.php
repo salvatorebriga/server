@@ -41,8 +41,6 @@ Route::middleware('auth')->group(function () {
 // Rotta per l'autocompletamento di TomTom
 Route::get('/autocomplete', [AutocompleteController::class, 'autocomplete']);
 
-// Rotta per la ricerca di appartamenti in base ai criteri come servizi, zona, ecc.
-Route::get('/search', [SearchController::class, 'search']);
 
 // Includi le rotte per l'autenticazione (login, registrazione, ecc.)
 require __DIR__ . '/auth.php';

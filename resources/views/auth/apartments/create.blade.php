@@ -6,8 +6,6 @@
     </x-slot>
 
     @include('shared.errors')
-    @include('shared.success')
-
 
     <div class="max-w-7xl mx-auto px-4 py-12">
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">

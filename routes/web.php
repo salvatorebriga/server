@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ApartmentsController;
 use App\Http\Controllers\AutocompleteController;
+use App\Http\Controllers\SearchController; // Importa il controller per la ricerca
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,6 @@ Route::get('/login', function () {
     return view('auth.login');
 });
 
-
 // Rotta per la dashboard che richiede autenticazione e verifica dell'email
 Route::get('/dashboard', function () {
     return view('auth.dashboard');
@@ -38,8 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('apartments', ApartmentsController::class);
 });
 
-//Rotta per l'autocompletamento di TomTom
+// Rotta per l'autocompletamento di TomTom
 Route::get('/autocomplete', [AutocompleteController::class, 'autocomplete']);
+
+// Rotta per la ricerca di appartamenti in base ai criteri come servizi, zona, ecc.
+Route::get('/api/search', [SearchController::class, 'search']);
 
 // Includi le rotte per l'autenticazione (login, registrazione, ecc.)
 require __DIR__ . '/auth.php';

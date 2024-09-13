@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
-    // Recupera la chiave API per TomTom dal file .env
+    // Chiave API per TomTom, recuperata dalle variabili di ambiente
     protected $tomTomApiKey;
 
     public function __construct()
@@ -18,6 +18,12 @@ class SearchController extends Controller
         $this->tomTomApiKey = env('TOMTOM_API_KEY'); // Recupera la chiave API dalle variabili di ambiente
     }
 
+    /**
+     * Ricerca gli appartamenti in base ai criteri forniti.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function search(Request $request)
     {
         // Recupera i criteri di ricerca dalla richiesta
@@ -69,7 +75,12 @@ class SearchController extends Controller
         return response()->json($apartments);
     }
 
-    // Funzione per ottenere latitudine e longitudine dall'indirizzo usando l'API di TomTom
+    /**
+     * Ottiene latitudine e longitudine dall'indirizzo usando l'API di TomTom.
+     *
+     * @param string $address
+     * @return array|null
+     */
     protected function getCoordinatesFromAddress($address)
     {
         $response = Http::get('https://api.tomtom.com/search/2/geocode/' . urlencode($address) . '.json', [

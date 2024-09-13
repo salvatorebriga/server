@@ -6,7 +6,7 @@
     </x-slot>
 
     @include('shared.errors')
-    @include('share.success')
+    @include('shared.success')
 
 
     <div class="max-w-7xl mx-auto px-4 py-12">

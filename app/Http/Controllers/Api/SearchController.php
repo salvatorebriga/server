@@ -83,7 +83,8 @@ class SearchController extends Controller
      */
     protected function getCoordinatesFromAddress($address)
     {
-        $response = Http::get('https://api.tomtom.com/search/2/geocode/' . urlencode($address) . '.json', [
+        // Disabilita la verifica SSL nella chiamata HTTP
+        $response = Http::withOptions(['verify' => false])->get('https://api.tomtom.com/search/2/geocode/' . urlencode($address) . '.json', [
             'key' => $this->tomTomApiKey // Chiave API di TomTom
         ]);
 

@@ -17,7 +17,6 @@ class SearchController extends Controller
      */
     public function search(Request $request)
     {
-
         $request->validate([
             'query' => 'required|string|max:255',
             'radius' => 'nullable|numeric|min:1',
@@ -52,6 +51,7 @@ class SearchController extends Controller
             $isWithinRadius = $distance <= $radius;
             $hasEnoughRooms = $apartment->rooms >= $minRooms;
 
+            // Se non ci sono servizi selezionati, non filtrare per servizi
             $hasRequiredServices = true;
             if (!empty($services)) {
                 $apartmentServices = $apartment->services->pluck('name')->toArray();

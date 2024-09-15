@@ -51,7 +51,6 @@ class SearchController extends Controller
             $isWithinRadius = $distance <= $radius;
             $hasEnoughRooms = $apartment->rooms >= $minRooms;
 
-            // Se non ci sono servizi selezionati, non filtrare per servizi
             $hasRequiredServices = true;
             if (!empty($services)) {
                 $apartmentServices = $apartment->services->pluck('name')->toArray();

@@ -8,3 +8,5 @@ Route::get('/apartments', [ApartmentsController::class, 'index'])->name('apartme
 Route::get('/apartments/{id}', [ApartmentsController::class, 'show'])->name('apartments.show');
 // Rotta per la ricerca di appartamenti in base ai criteri come servizi, zona, ecc.
 Route::get('/search', [SearchController::class, 'search']);
+// fetch dei servizi
+Route::get('/search/services', [SearchController::class, 'getAvailableServices']);

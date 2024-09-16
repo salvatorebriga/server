@@ -4,7 +4,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ApartmentsController;
 use App\Http\Controllers\AutocompleteController;
-use App\Http\Controllers\SearchController; // Importa il controller per la ricerca
 
 /*
 |--------------------------------------------------------------------------

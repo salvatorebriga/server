@@ -16,34 +16,34 @@ class ServiceSeeder extends Seeder
     public function run(): void
     {
         Schema::disableForeignKeyConstraints();
-        // Truncate la tabella 'services'
+        // Truncate the 'services' table
         DB::table('services')->truncate();
 
-         // Definisci l'array di servizi
-         $services = [
+        // Define the array of services
+        $services = [
             ['name' => 'Wi-Fi'],
-            ['name' => 'Aria Condizionata'],
-            ['name' => 'Riscaldamento'],
-            ['name' => 'Cucina Completa'],
-            ['name' => 'Lavatrice'],
-            ['name' => 'Asciugatrice'],
-            ['name' => 'TV via Cavo'],
-            ['name' => 'Piscina'],
-            ['name' => 'Parcheggio'],
-            ['name' => 'Palestra'],
+            ['name' => 'Air Conditioning'],
+            ['name' => 'Heating'],
+            ['name' => 'Full Kitchen'],
+            ['name' => 'Washing Machine'],
+            ['name' => 'Dryer'],
+            ['name' => 'Cable TV'],
+            ['name' => 'Swimming Pool'],
+            ['name' => 'Parking'],
+            ['name' => 'Gym'],
             ['name' => 'Sauna'],
             ['name' => 'Jacuzzi'],
-            ['name' => 'Balcone'],
-            ['name' => 'Terrazzo'],
-            ['name' => 'Barbecue'],
-            ['name' => 'Servizio di Pulizia'],
-            ['name' => 'Sicurezza 24/7'],
-            ['name' => 'Accesso Disabili'],
-            ['name' => 'Animali Ammessi'],
-            ['name' => 'Culla per Bambini']
+            ['name' => 'Balcony'],
+            ['name' => 'Terrace'],
+            ['name' => 'BBQ Grill'],
+            ['name' => 'Cleaning Service'],
+            ['name' => '24/7 Security'],
+            ['name' => 'Wheelchair Accessible'],
+            ['name' => 'Pet Friendly'],
+            ['name' => 'Baby Crib'],
         ];
-        
-        // Inserisci i servizi nella tabella
+
+        // Insert the services into the table
         foreach ($services as $service) {
             Service::create($service);
         }

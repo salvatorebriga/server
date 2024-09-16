@@ -15,7 +15,7 @@
 
                 <!-- Title -->
                 <div class="mb-4">
-                    <x-input-label for="title" :value="__('Title')" />
+                    <x-input-label for="title" :value="__('Title*')" />
                     <x-text-input id="title" class="block mt-1 w-full" type="text" name="title"
                         :value="old('title', $apartment->title)" required />
                 </div>
@@ -23,7 +23,7 @@
                 <!-- Address -->
                 <div class="mb-4">
                     <div class="relative w-full">
-                        <x-input-label for="address" :value="__('Address')" />
+                        <x-input-label for="address" :value="__('Address*')" />
                         <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"
                             :value="old('address', $apartment->address)" oninput="getAutocomplete()" required autofocus />
                         <ul id="results"
@@ -49,25 +49,25 @@
                 <!-- Rooms, Beds, and Bathrooms -->
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                        <x-input-label for="mq" :value="__('Mq')" />
+                        <x-input-label for="mq" :value="__('Mq*')" />
                         <x-text-input id="mq" class="block mt-1 w-full"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="mq" :value="old('mq', $apartment->mq)"
                             required />
                     </div>
                     <div>
-                        <x-input-label for="rooms" :value="__('Rooms')" />
+                        <x-input-label for="rooms" :value="__('Rooms*')" />
                         <x-text-input id="rooms" class="block mt-1 w-full"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="rooms" :value="old('rooms', $apartment->rooms)"
                             required />
                     </div>
                     <div>
-                        <x-input-label for="beds" :value="__('Beds')" />
+                        <x-input-label for="beds" :value="__('Beds*')" />
                         <x-text-input id="beds" class="block mt-1 w-full"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="beds" :value="old('beds', $apartment->beds)"
                             required />
                     </div>
                     <div>
-                        <x-input-label for="bathrooms" :value="__('Bathrooms')" />
+                        <x-input-label for="bathrooms" :value="__('Bathrooms*')" />
                         <x-text-input id="bathrooms" class="block mt-1 w-full"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="bathrooms"
                             :value="old('bathrooms', $apartment->bathrooms)" required />
@@ -76,7 +76,7 @@
 
                 <!-- Checkbox per i servizi -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-400 mb-2">Servizi</label>
+                    <label class="block text-gray-700 dark:text-gray-400 mb-2">Services&ast;</label>
                     <div class="grid grid-cols-2 gap-4">
                         @foreach ($services as $service)
                             <div>
@@ -96,18 +96,21 @@
 
                 <!-- Availability -->
                 <div class="mb-4">
-                    <x-input-label for="is_available" :value="__('Available')" />
-                    <select
-                        class="px-4 pe-9 block w-full border-gray-300 rounded-lg text-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:placeholder-neutral-500 dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
-                        name="is_available" id="is_available" required>
-                        <option value="" disabled>Select availability</option>
-                        <option value="1"
-                            {{ old('is_available', $apartment->is_available) == '1' ? 'selected' : '' }}>Yes
-                        </option>
-                        <option value="0"
-                            {{ old('is_available', $apartment->is_available) == '0' ? 'selected' : '' }}>No
-                        </option>
-                    </select>
+                    <x-input-label for="is_available" :value="__('Available*')" />
+                    <div class="flex items-center space-x-4">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="is_available" value="1"
+                                class="form-radio h-4 w-4 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-900 dark:border-gray-700"
+                                {{ old('is_available', $apartment->is_available ?? '') == '1' ? 'checked' : '' }}>
+                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ __('Yes') }}</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="is_available" value="0"
+                                class="form-radio h-4 w-4 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-900 dark:border-gray-700"
+                                {{ old('is_available', $apartment->is_available ?? '') == '0' ? 'checked' : '' }}>
+                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ __('No') }}</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="flex justify-between items-center mt-6">

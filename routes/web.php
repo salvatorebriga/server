@@ -18,6 +18,10 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 |
 */
 
+Route::get('/', function () {
+    return redirect('/login');
+});
+
 // Rotta per la dashboard che richiede autenticazione e verifica dell'email
 Route::get('/dashboard', function () {
     return view('auth.dashboard');

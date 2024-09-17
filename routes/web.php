@@ -18,14 +18,6 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 |
 */
 
-// rotta per gestire correttamente il login
-Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
-Route::post('/', [AuthenticatedSessionController::class, 'store'])->name('login.post');
-
-// rotta per gestire correttamente la registrazione
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.post');
-
 // Rotta per la dashboard che richiede autenticazione e verifica dell'email
 Route::get('/dashboard', function () {
     return view('auth.dashboard');

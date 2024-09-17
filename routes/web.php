@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ApartmentsController;
 use App\Http\Controllers\AutocompleteController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,13 +18,13 @@ use App\Http\Controllers\AutocompleteController;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.register');
-});
+// rotta per gestire correttamente il login
+Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/', [AuthenticatedSessionController::class, 'store'])->name('login.post');
 
-Route::get('/login', function () {
-    return view('auth.login');
-});
+// rotta per gestire correttamente la registrazione
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.post');
 
 // Rotta per la dashboard che richiede autenticazione e verifica dell'email
 Route::get('/dashboard', function () {

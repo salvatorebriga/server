@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApartmentsController;
 use App\Http\Controllers\Api\AutocompleteController;
 use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,7 @@ Route::get('/apartments/{id}', [ApartmentsController::class, 'show'])->name('apa
 Route::get('/search', [SearchController::class, 'search']);
 // fetch dei servizi
 Route::get('/search/services', [SearchController::class, 'getAvailableServices']);
-
-
 // Rotta per l'autocompletamento di TomTom
 Route::get('/autocomplete', [AutocompleteController::class, 'autocomplete']);
+// Rotta per l'inserimento dei messaggi
+Route::post('/message', [MessageController::class, 'storeMessage']);

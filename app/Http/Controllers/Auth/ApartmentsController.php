@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Apartment;
+use App\Models\Message;
 use App\Models\Service;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -117,9 +118,10 @@ class ApartmentsController extends Controller
     {
         // Recupera l'appartamento dal database tramite l'ID
         $apartment = Apartment::findOrFail($id);
+        $messages = Message::where('apartment_id', $apartment->id)->get();
 
         // Passa i dati dell'appartamento alla vista "show"
-        return view('auth.apartments.show', compact('apartment'));
+        return view('auth.apartments.show', compact('apartment', 'messages'));
     }
 
     /**

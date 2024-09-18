@@ -51,13 +51,15 @@ class SearchController extends Controller
             $isWithinRadius = $distance <= $radius;
             $hasEnoughRooms = $apartment->rooms >= $minRooms;
 
+            $isAvailable = $apartment->is_available;
+
             $hasRequiredServices = true;
             if (!empty($services)) {
                 $apartmentServices = $apartment->services->pluck('name')->toArray();
                 $hasRequiredServices = count(array_intersect($services, $apartmentServices)) === count($services);
             }
 
-            return $isWithinRadius && $hasEnoughRooms && $hasRequiredServices;
+            return $isWithinRadius && $hasEnoughRooms && $hasRequiredServices && $isAvailable;
         })->values();
 
         $apartmentsArray = $filteredApartments->map(function ($apartment) {

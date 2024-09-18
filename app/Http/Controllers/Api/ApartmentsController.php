@@ -55,10 +55,8 @@ class ApartmentsController extends Controller
      */
     public function show($id)
     {
-        // Trova l'appartamento per ID con la relazione user e sponsors
-        $apartment = Apartment::with(['user', 'sponsors'])->findOrFail($id);
+        $apartment = Apartment::with(['user', 'sponsors', 'services'])->findOrFail($id);
 
-        // Ritorna il singolo appartamento con i dati della sponsorizzazione
         return response()->json([
             'id' => $apartment->id,
             'title' => $apartment->title,
@@ -75,13 +73,17 @@ class ApartmentsController extends Controller
                 'name' => $apartment->user->name,
                 'surname' => $apartment->user->surname,
             ],
-            // Aggiungi i dati della sponsorizzazione se esistenti
             'sponsor' => $apartment->sponsors->isNotEmpty() ? [
                 'type' => $apartment->sponsors->first()->pivot->type,
                 'time' => $apartment->sponsors->first()->pivot->time,
                 'start_date' => $apartment->sponsors->first()->pivot->start_date,
                 'end_date' => $apartment->sponsors->first()->pivot->end_date,
             ] : null,
+            'services' => $apartment->services->map(function ($service) {
+                return [
+                    'name' => $service->name,
+                ];
+            }),
         ]);
     }
 }

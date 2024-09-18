@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ApartmentsController;
 use App\Http\Controllers\AutocompleteController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +17,21 @@ use App\Http\Controllers\AutocompleteController;
 |
 */
 
+// Rotta per la home che gestisce diversi casi per utenti autenticati e non
 Route::get('/', function () {
-    return view('welcome');
+    // Se l'utente è autenticato
+    if (Auth::check()) {
+        return redirect()->route('dashboard'); // Reindirizza alla dashboard se autenticato
+    }
+
+    // Se l'utente non è autenticato, reindirizzalo alla pagina di login
+    return redirect()->route('login');
 });
 
-// Rotta per la dashboard che richiede autenticazione e verifica dell'email
+// Rotta per la dashboard che richiede solo autenticazione
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+})->middleware(['auth'])->name('dashboard');
 // Rotte per la gestione del profilo dell'utente
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -60,9 +60,13 @@
                         <span class="text-red-500">No</span>
                     @endif
                 </p>
+                <div class="total-sponsorship-time">
+                    <h3>Total Time Accumulated</h3>
+                    <p>{{ $totalHours }} hours and {{ $totalMinutes }} minutes</p>
+                </div>
             </div>
-        </div>
 
+        </div>
         <div class="flex justify-between items-center mt-6">
             <!-- Back Button -->
             <a href="{{ route('apartments.index') }}"
@@ -79,6 +83,7 @@
             </a>
         </div>
     </div>
+
 
     {{-- Message Section --}}
     <div class="max-w-7xl mx-auto px-4 py-12">

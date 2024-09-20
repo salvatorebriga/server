@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ApartmentsController;
 use App\Http\Controllers\Api\AutocompleteController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\TomTomMapContreller;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +33,6 @@ Route::get('/search/services', [SearchController::class, 'getAvailableServices']
 Route::get('/autocomplete', [AutocompleteController::class, 'autocomplete']);
 // Rotta per l'inserimento dei messaggi
 Route::post('/message', [MessageController::class, 'storeMessage']);
+
+// Rotta per la mappa tomtom
+Route::get('/map', [TomTomMapContreller::class, 'mapData']);

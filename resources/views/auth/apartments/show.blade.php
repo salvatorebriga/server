@@ -151,8 +151,9 @@
             <!-- Contenitore per il Drop-in -->
             <div id="dropin-container"></div>
 
-            <form id="sponsorship-form" method="POST" action="{{ route('sponsorship.store', $apartment->id) }}">
+            <form id="sponsorship-form" method="POST" action="{{ route('sponsorship.store') }}">
                 @csrf
+                <input type="hidden" name="apartment_id" value="{{ $apartment->id }}">
                 <div>
                     <label class="flex items-center mb-2">
                         <input type="radio" name="sponsorship" value="basic"

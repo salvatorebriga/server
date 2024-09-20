@@ -114,11 +114,16 @@ class ApartmentsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(int $id, Request $request)
     {
         // Recupera l'appartamento dal database tramite l'ID
         $apartment = Apartment::findOrFail($id);
         $messages = Message::where('apartment_id', $apartment->id)->get();
+
+        // Se la richiesta è una POST, registra la visualizzazione dell'appartamento
+        if ($request->isMethod('post')) {
+            $this->storeViewStat($request, $apartment->id);
+        }
 
         // Passa i dati dell'appartamento alla vista "show"
         return view('auth.apartments.show', compact('apartment', 'messages'));
@@ -245,5 +250,27 @@ class ApartmentsController extends Controller
 
         // Reindirizza l'utente alla lista degli appartamenti con un messaggio di successo
         return redirect()->route('apartments.index')->with('success', 'Appartamento eliminato con successo');
+    }
+
+    /**
+     * Saves apartment statistics
+     */
+    public function storeViewStat(Request $request, $apartmentId)
+    {
+        $ipAddress = $request->ip();
+
+        // Controlla se l'IP ha già visualizzato questo appartamento nelle ultime 24 ore
+        $existingStat = \App\Models\Statistic::where('apartment_id', $apartmentId)
+            ->where('ip_address', $ipAddress)
+            ->where('created_at', '>=', now()->subDay())
+            ->first();
+
+        // Se non esiste una visualizzazione recente, salvala
+        if (!$existingStat) {
+            \App\Models\Statistic::create([
+                'apartment_id' => $apartmentId,
+                'ip_address' => $ipAddress,
+            ]);
+        }
     }
 }

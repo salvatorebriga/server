@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Dettagli Appartamento
+            Apartment Details
         </h2>
     </x-slot>
 
@@ -9,20 +9,20 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 sm:p-8">
-                    <!-- Sezione Immagine Centrata -->
+                    <!-- Centered Image Section -->
                     <div class="mb-8">
                         @if ($apartment->img)
-                            <img src="{{ asset('storage/' . $apartment->img) }}" alt="Immagine Appartamento"
+                            <img src="{{ asset('storage/' . $apartment->img) }}" alt="Apartment Image"
                                 class="w-full max-w-3xl mx-auto h-auto rounded-lg shadow-md">
                         @else
                             <div
                                 class="w-full max-w-3xl mx-auto h-64 bg-gray-300 dark:bg-gray-700 rounded-lg shadow-md flex items-center justify-center">
-                                <span class="text-gray-600 dark:text-gray-400">Immagine non disponibile</span>
+                                <span class="text-gray-600 dark:text-gray-400">Image not available</span>
                             </div>
                         @endif
                     </div>
 
-                    <!-- Titolo e Indirizzo -->
+                    <!-- Title and Address -->
                     <div class="text-center mb-8">
                         <h3 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">{{ $apartment->title }}
                         </h3>
@@ -40,11 +40,11 @@
                         </p>
                     </div>
 
-                    <!-- Dettagli Appartamento -->
+                    <!-- Apartment Details -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Caratteristiche -->
+                        <!-- Features -->
                         <div>
-                            <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Caratteristiche</h4>
+                            <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Features</h4>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
@@ -53,7 +53,7 @@
                                             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                                         </path>
                                     </svg>
-                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->rooms }} Stanze</span>
+                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->rooms }} Rooms</span>
                                 </div>
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
@@ -62,7 +62,7 @@
                                             d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
                                         </path>
                                     </svg>
-                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->beds }} Letti</span>
+                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->beds }} Beds</span>
                                 </div>
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
@@ -71,7 +71,7 @@
                                             d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
                                     </svg>
                                     <span class="text-gray-700 dark:text-gray-300">{{ $apartment->bathrooms }}
-                                        Bagni</span>
+                                        Bathrooms</span>
                                 </div>
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
@@ -85,13 +85,13 @@
                             </div>
                         </div>
 
-                        <!-- Servizi -->
+                        <!-- Services -->
                         <div>
-                            <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Servizi</h4>
+                            <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Services</h4>
                             <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
                                 @if ($apartment->services->isEmpty())
-                                    <p class="text-gray-600 dark:text-gray-400">Nessun servizio disponibile per questo
-                                        appartamento.</p>
+                                    <p class="text-gray-600 dark:text-gray-400">No services available for this
+                                        apartment.</p>
                                 @else
                                     <div class="grid grid-cols-2 gap-2">
                                         @foreach ($apartment->services as $service)
@@ -112,44 +112,43 @@
                         </div>
                     </div>
 
-                    <!-- Informazioni Aggiuntive -->
+                    <!-- Additional Information -->
                     <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-                            <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Disponibilità</h5>
+                            <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Availability</h5>
                             <p class="text-xl font-bold">
                                 @if ($apartment->is_available)
-                                    <span class="text-green-600 dark:text-green-400">Disponibile</span>
+                                    <span class="text-green-600 dark:text-green-400">Available</span>
                                 @else
-                                    <span class="text-red-600 dark:text-red-400">Non disponibile</span>
+                                    <span class="text-red-600 dark:text-red-400">Not Available</span>
                                 @endif
                             </p>
                         </div>
                         <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-                            <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Visualizzazioni</h5>
+                            <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Views</h5>
                             <p class="text-xl font-bold text-gray-900 dark:text-white">
                                 {{ $apartment->statistics->count() }}</p>
                         </div>
                         <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-                            <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Tempo Sponsorizzato
-                            </h5>
+                            <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Sponsored Time</h5>
                             <p class="text-xl font-bold text-gray-900 dark:text-white">{{ $totalHours }}h
                                 {{ $totalMinutes }}m</p>
                         </div>
                     </div>
 
-                    <!-- Pulsanti di azione -->
+                    <!-- Action Buttons -->
                     <div class="flex flex-wrap justify-center gap-4 mt-8">
                         <a href="{{ route('apartments.index') }}"
                             class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300 ease-in-out">
-                            Torna alla Lista
+                            Back to List
                         </a>
                         <button id="sponsor-button"
                             class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 ease-in-out">
-                            Sponsorizza Appartamento
+                            Sponsor Apartment
                         </button>
                         <a href="{{ route('apartments.edit', $apartment->id) }}"
                             class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out">
-                            Modifica Appartamento
+                            Edit Apartment
                         </a>
                     </div>
                 </div>
@@ -157,21 +156,20 @@
         </div>
     </div>
 
-    <!-- Sezione Messaggi (invariata) -->
+    <!-- Messages Section -->
     <div class="py-12 bg-gray-100 dark:bg-gray-900">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 sm:p-8">
-                    <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Messaggi</h3>
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Messages</h3>
 
                     @if ($messages->isEmpty())
-                        <p class="text-gray-600 dark:text-gray-400">Nessun messaggio disponibile per questo
-                            appartamento.</p>
+                        <p class="text-gray-600 dark:text-gray-400">No messages available for this apartment.</p>
                     @else
                         <div class="mb-4">
                             <button onclick="deleteSelected()"
                                 class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 ease-in-out">
-                                Elimina Selezionati
+                                Delete Selected
                             </button>
                         </div>
 
@@ -201,6 +199,7 @@
             </div>
         </div>
     </div>
+
 
 
     <!-- Confirmation Modal -->

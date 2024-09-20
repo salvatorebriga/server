@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ApartmentsController;
 use App\Http\Controllers\AutocompleteController;
 use App\Http\Controllers\Auth\MessageController;
+use App\Http\Controllers\Auth\SponsorshipController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('apartments', ApartmentsController::class);
     Route::delete('/messages/multiple', [MessageController::class, 'destroyMultiple'])->name('messages.destroyMultiple');
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('messages.destroy');
+    Route::post('/sponsorship/{apartment}', [SponsorshipController::class, 'store'])->name('sponsorship.store');
 });
 
 Route::get('/autocomplete', [AutocompleteController::class, 'autocomplete']);

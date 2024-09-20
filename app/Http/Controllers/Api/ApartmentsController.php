@@ -50,12 +50,33 @@ class ApartmentsController extends Controller
         return response()->json($apartments);
     }
 
+    public function storeViewStat(Request $request, $apartmentId)
+    {
+        $ipAddress = $request->ip();
+
+        // Controlla se l'IP ha già visualizzato questo appartamento nelle ultime 24 ore
+        $existingStat = \App\Models\Statistic::where('apartment_id', $apartmentId)
+            ->where('ip_address', $ipAddress)
+            ->where('created_at', '>=', now()->subDay())
+            ->first();
+
+        if (!$existingStat) {
+            \App\Models\Statistic::create([
+                'apartment_id' => $apartmentId,
+                'ip_address' => $ipAddress,
+            ]);
+        }
+    }
+
+
     /**
      * Display the specified apartment.
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         $apartment = Apartment::with(['user', 'sponsors', 'services'])->findOrFail($id);
+
+        $this->storeViewStat($request, $id);
 
         return response()->json([
             'id' => $apartment->id,

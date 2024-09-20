@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/apartments', [ApartmentsController::class, 'index'])->name('apartments.index');
 Route::get('/apartments/{id}', [ApartmentsController::class, 'show'])->name('apartments.show');
+Route::post('/apartments/{id}/store-view-stat', [ApartmentsController::class, 'storeViewStat'])->name('apartments.storeViewStat');
 // Rotta per la ricerca di appartamenti in base ai criteri come servizi, zona, ecc.
 Route::get('/search', [SearchController::class, 'search']);
 // fetch dei servizi

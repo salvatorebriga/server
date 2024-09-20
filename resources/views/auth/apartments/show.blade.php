@@ -182,26 +182,7 @@
         </div>
     </div>
 
-
-
     <script>
-        function deleteSelected() {
-            const selectedIds = Array.from(document.querySelectorAll('input[name="message_ids[]"]:checked'))
-                .map(cb => cb.value);
-            if (selectedIds.length > 0) {
-                document.getElementById('confirmationModal').classList.remove('hidden');
-                document.getElementById('messageIds').value = selectedIds.join(',');
-                document.getElementById('deleteForm').action = '{{ route('messages.destroyMultiple') }}';
-                document.getElementById('returnUrl').value = '{{ url()->current() }}';
-            } else {
-                alert('No messages selected.');
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('confirmationModal').classList.add('hidden');
-        }
-        //modale sp0onsor
         document.getElementById('sponsor-button').addEventListener('click', function() {
             document.getElementById('sponsorshipModal').classList.remove('hidden');
         });
@@ -209,13 +190,26 @@
         function closeSponsorshipModal() {
             document.getElementById('sponsorshipModal').classList.add('hidden');
         }
-        //pay now button
+
         document.querySelectorAll('input[name="sponsorship"]').forEach(function(radio) {
             radio.addEventListener('change', function() {
                 document.getElementById('pay-button').classList.remove('hidden');
             });
         });
+
+        function closeModal() {
+            document.getElementById('confirmationModal').classList.add('hidden');
+        }
+
+        function deleteSelected() {
+            const selected = Array.from(document.querySelectorAll('input[name="message_ids[]"]:checked')).map(checkbox =>
+                checkbox.value);
+            if (selected.length > 0) {
+                document.getElementById('messageIds').value = selected.join(',');
+                document.getElementById('confirmationModal').classList.remove('hidden');
+            } else {
+                alert("Please select at least one message to delete.");
+            }
+        }
     </script>
-
-
 </x-app-layout>

@@ -9,25 +9,40 @@ use App\Models\Sponsor;
 
 class SponsorshipController extends Controller
 {
-    // Metodo per gestire la creazione della sponsorizzazione
-    public function store (Request $request)
+    public function store(Request $request)
     {
-        //validazione
+        // Validazione
+
         $request->validate([
-            'sposorship'=> 'required|in:basic,premium,exsclusive',
-            'apartment_id'=> 'required|exists:apartments,id'
+            'sponsorship' => 'required|in:basic,premium,exclusive',
+            'apartment_id' => 'required|exists:apartments,id'
         ]);
-        //rewcupero app dall id
-        $apartment = Apartment::find($request->apartment_id);
         
-        //rewcupero sposnorizzazione in base al alla scelta
+        
+
+        // Recupero appartamento
+        $apartment = Apartment::find($request->apartment_id);
+        // Recupero sponsorizzazione in base alla scelta
         $sponsor = Sponsor::where('type', $request->sponsorship)->first();
-    
-        // associazione della spons all id dell appartamento
-        $apartment->sponsor()->attach($sponsor->id, [
-            'start_date'=> now(),
-            'end_date'=> now()->addHours($sponsor->time),
-        ]);
+        
+        // Controlla se esiste già una sponsorizzazione
+        $existingSponsor = $apartment->sponsor()->where('sponsor_id', $sponsor->id)->first();
+        dd($request->all());
+
+        if ($existingSponsor) {
+            // Se esiste, accumula il tempo
+            $existingSponsor->update([
+                'end_date' => $existingSponsor->end_date->addHours($sponsor->time)
+            ]);
+        } else {
+            // Se non esiste, crea una nuova sponsorizzazione
+            $apartment->sponsor()->attach($sponsor->id, [
+                'start_date' => now(),
+                'end_date' => now()->addHours($sponsor->time),
+            ]);
+        }
+
+
 
         return redirect()->back()->with('success', 'Apartment sponsored successfully');
     }

@@ -143,9 +143,6 @@
             </form>
         </div>
     </div>
-
-    <!-- Sponsorship Modal -->
-    <!-- Sponsorship Modal -->
     <div id="sponsorshipModal"
         class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -189,6 +186,15 @@
         </div>
     </div>
 
+    <!-- Modale di conferma -->
+    <div id="confirmationModal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Payment Successful!</h3>
+            <p class="text-gray-700 dark:text-gray-200">Your payment has been processed successfully.</p>
+        </div>
+    </div>
+
     <script src="https://js.braintreegateway.com/web/dropin/1.43.0/js/dropin.js"></script>
     <script>
         var button = document.querySelector('#pay-button');
@@ -226,11 +232,16 @@
                         .display = 'none';
                 });
 
-                // Mostra la modale di conferma senza inviare il form
+                // Mostra la modale di conferma
                 document.getElementById('confirmationModal').classList.remove('hidden');
 
-                // Rimuovi il submit automatico, ora il form sarà inviato quando decidi tu
-                // form.submit(); // Rimuovi questa linea
+                // Chiudi automaticamente la modale dopo 3 secondi (3000 ms)
+                setTimeout(function() {
+                    document.getElementById('confirmationModal').classList.add('hidden');
+                }, 10000);
+
+                // Invia il form
+                form.submit(); // Questo invia il form
             });
         });
 

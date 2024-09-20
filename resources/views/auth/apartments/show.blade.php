@@ -34,6 +34,9 @@
                     {{ $apartment->bathrooms }}</p>
                 <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Square Meters:</strong> {{ $apartment->mq }}
                     m²</p>
+                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Numero totale di visualizzazioni:
+                        {{ $apartment->statistics->count() }}</strong>
+                </p>
 
                 <!-- Services Section -->
                 <div class="bg-white dark:bg-gray-800 py-2">

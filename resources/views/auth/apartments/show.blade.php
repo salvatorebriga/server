@@ -146,7 +146,7 @@
         class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Select Sponsorship</h3>
-
+            <div id="dropin-container"></div>
             <form id="sponsorship-form" method="POST" action="{{ route('sponsorship.store', $apartment->id) }}">
                 @csrf
                 <div>
@@ -181,10 +181,35 @@
             </form>
         </div>
     </div>
+    <script src="https://js.braintreegateway.com/web/dropin/1.43.0/js/dropin.js"></script>
 
     <script>
+        var button = document.querySelector('#pay-button');
+        var instance; // Variabile per l'istanza del Drop-in
+
         document.getElementById('sponsor-button').addEventListener('click', function() {
             document.getElementById('sponsorshipModal').classList.remove('hidden');
+
+            // Inizializza il Drop-in quando la modale è aperta
+            braintree.dropin.create({
+                authorization: 'sandbox_g42y39zw_348pk9cgf3bgyw2b',
+                selector: '#dropin-container'
+            }, function(err, dropinInstance) {
+                instance = dropinInstance;
+            });
+        });
+
+        button.addEventListener('click', function() {
+            instance.requestPaymentMethod(function(err, payload) {
+                // Invia il nonce al server con il form
+                var form = document.getElementById('sponsorship-form');
+                var nonceInput = document.createElement('input');
+                nonceInput.setAttribute('type', 'hidden');
+                nonceInput.setAttribute('name', 'payment_method_nonce');
+                nonceInput.setAttribute('value', payload.nonce);
+                form.appendChild(nonceInput);
+                form.submit(); // Invia il form
+            });
         });
 
         function closeSponsorshipModal() {

@@ -1,131 +1,207 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Apartment Details
+            Dettagli Appartamento
         </h2>
     </x-slot>
 
-    <div class="max-w-7xl mx-auto px-4 py-12">
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 flex">
-            <!-- Image Section -->
-            <div class="w-1/2 pr-6">
-                @if ($apartment->img)
-                    <img src="{{ asset('storage/' . $apartment->img) }}" alt="Apartment Image"
-                        class="w-full h-auto rounded-lg">
-                @else
-                    <div class="w-full h-64 bg-gray-300 text-center flex items-center justify-center rounded-lg">
-                        <span class="text-gray-600 dark:text-gray-400">Image not available</span>
-                    </div>
-                @endif
-            </div>
-
-            <!-- Details Section -->
-            <div class="w-1/2">
-                <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">{{ $apartment->title }}</h3>
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Address:</strong> {{ $apartment->address }},
-                    {{ $apartment->house_number }}, {{ $apartment->postal_code }}, {{ $apartment->country }}</p>
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Latitude:</strong>
-                    {{ $apartment->latitude ?? 'Not provided' }}</p>
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Longitude:</strong>
-                    {{ $apartment->longitude ?? 'Not provided' }}</p>
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Rooms:</strong> {{ $apartment->rooms }}</p>
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Beds:</strong> {{ $apartment->beds }}</p>
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Bathrooms:</strong>
-                    {{ $apartment->bathrooms }}</p>
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Square Meters:</strong> {{ $apartment->mq }}
-                    m²</p>
-                <p class="text-gray-700 dark:text-gray-400 mb-2"><strong>Numero totale di visualizzazioni:
-                        {{ $apartment->statistics->count() }}</strong>
-                </p>
-
-                <!-- Services Section -->
-                <div class="bg-white dark:bg-gray-800 py-2">
-                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Services</h3>
-                    @if ($apartment->services->isEmpty())
-                        <p class="text-gray-600 dark:text-gray-400">No services available for this apartment.</p>
-                    @else
-                        <ul class="list-disc list-inside text-gray-700 dark:text-gray-400">
-                            @foreach ($apartment->services as $service)
-                                <li>{{ $service->name }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-
-                <p class="text-gray-700 dark:text-gray-400 mb-2">
-                    <strong>Available:</strong>
-                    @if ($apartment->is_available)
-                        <span class="text-green-500">Yes</span>
-                    @else
-                        <span class="text-red-500">No</span>
-                    @endif
-                </p>
-                <div class="total-sponsorship-time">
-                    <h3>Total Time Accumulated</h3>
-                    <p>{{ $totalHours }} hours and {{ $totalMinutes }} minutes</p>
-                </div>
-            </div>
-
-        </div>
-        <div class="flex justify-between items-center mt-6">
-            <!-- Back Button -->
-            <a href="{{ route('apartments.index') }}"
-                class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                Back to List
-            </a>
-            <!-- Sponsorship Button -->
-            <button id="sponsor-button" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Sponsor
-                Apartment</button>
-            <!-- Edit Button -->
-            <a href="{{ route('apartments.edit', $apartment->id) }}"
-                class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                Edit Apartment
-            </a>
-        </div>
-    </div>
-
-
-    {{-- Message Section --}}
-    <div class="max-w-7xl mx-auto px-4 py-12">
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Messages</h3>
-
-            @if ($messages->isEmpty())
-                <p class="text-gray-600 dark:text-gray-400">No messages available for this apartment.</p>
-            @else
-                <!-- Delete Selected Button -->
-                <div class="mb-4">
-                    <button onclick="deleteSelected()"
-                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                        Delete Selected
-                    </button>
-                </div>
-
-                <div class="space-y-4">
-                    @foreach ($messages as $message)
-                        <div
-                            class="relative bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md w-full break-words hover:bg-gray-200 dark:hover:bg-gray-600">
-                            <!-- Checkbox -->
-                            <input type="checkbox"
-                                class="dark:bg-gray-800 dark:border-none absolute top-1/2 left-6 cursor-pointer"
-                                value="{{ $message->id }}" name="message_ids[]" />
-
-                            <div class="flex justify-between items-center mb-4 ml-12">
-                                <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                                    {{ $message->name }} {{ $message->surname }}
-                                </h4>
-                                <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $message->email }}</p>
+    <div class="py-12 bg-gray-100 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="p-6 sm:p-8">
+                    <!-- Sezione Immagine Centrata -->
+                    <div class="mb-8">
+                        @if ($apartment->img)
+                            <img src="{{ asset('storage/' . $apartment->img) }}" alt="Immagine Appartamento"
+                                class="w-full max-w-3xl mx-auto h-auto rounded-lg shadow-md">
+                        @else
+                            <div
+                                class="w-full max-w-3xl mx-auto h-64 bg-gray-300 dark:bg-gray-700 rounded-lg shadow-md flex items-center justify-center">
+                                <span class="text-gray-600 dark:text-gray-400">Immagine non disponibile</span>
                             </div>
+                        @endif
+                    </div>
 
-                            <p class="text-gray-700 dark:text-gray-400 ml-12">
-                                {{ $message->message }}
+                    <!-- Titolo e Indirizzo -->
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">{{ $apartment->title }}
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-300 flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2 text-gray-500 dark:text-gray-400" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            {{ $apartment->address }}, {{ $apartment->house_number }}, {{ $apartment->postal_code }},
+                            {{ $apartment->country }}
+                        </p>
+                    </div>
+
+                    <!-- Dettagli Appartamento -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Caratteristiche -->
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Caratteristiche</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                        </path>
+                                    </svg>
+                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->rooms }} Stanze</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                                        </path>
+                                    </svg>
+                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->beds }} Letti</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
+                                    </svg>
+                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->bathrooms }}
+                                        Bagni</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4">
+                                        </path>
+                                    </svg>
+                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->mq }} m²</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Servizi -->
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Servizi</h4>
+                            <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                                @if ($apartment->services->isEmpty())
+                                    <p class="text-gray-600 dark:text-gray-400">Nessun servizio disponibile per questo
+                                        appartamento.</p>
+                                @else
+                                    <div class="grid grid-cols-2 gap-2">
+                                        @foreach ($apartment->services as $service)
+                                            <div class="flex items-center">
+                                                <svg class="w-4 h-4 mr-2 text-green-500" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span
+                                                    class="text-gray-700 dark:text-gray-300">{{ $service->name }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informazioni Aggiuntive -->
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                            <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Disponibilità</h5>
+                            <p class="text-xl font-bold">
+                                @if ($apartment->is_available)
+                                    <span class="text-green-600 dark:text-green-400">Disponibile</span>
+                                @else
+                                    <span class="text-red-600 dark:text-red-400">Non disponibile</span>
+                                @endif
                             </p>
                         </div>
-                    @endforeach
+                        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                            <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Visualizzazioni</h5>
+                            <p class="text-xl font-bold text-gray-900 dark:text-white">
+                                {{ $apartment->statistics->count() }}</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+                            <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Tempo Sponsorizzato
+                            </h5>
+                            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ $totalHours }}h
+                                {{ $totalMinutes }}m</p>
+                        </div>
+                    </div>
+
+                    <!-- Pulsanti di azione -->
+                    <div class="flex flex-wrap justify-center gap-4 mt-8">
+                        <a href="{{ route('apartments.index') }}"
+                            class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300 ease-in-out">
+                            Torna alla Lista
+                        </a>
+                        <button id="sponsor-button"
+                            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 ease-in-out">
+                            Sponsorizza Appartamento
+                        </button>
+                        <a href="{{ route('apartments.edit', $apartment->id) }}"
+                            class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out">
+                            Modifica Appartamento
+                        </a>
+                    </div>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
+
+    <!-- Sezione Messaggi (invariata) -->
+    <div class="py-12 bg-gray-100 dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="p-6 sm:p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Messaggi</h3>
+
+                    @if ($messages->isEmpty())
+                        <p class="text-gray-600 dark:text-gray-400">Nessun messaggio disponibile per questo
+                            appartamento.</p>
+                    @else
+                        <div class="mb-4">
+                            <button onclick="deleteSelected()"
+                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 ease-in-out">
+                                Elimina Selezionati
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            @foreach ($messages as $message)
+                                <div
+                                    class="relative bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out">
+                                    <input type="checkbox"
+                                        class="absolute top-4 left-4 w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                        value="{{ $message->id }}" name="message_ids[]">
+
+                                    <div class="ml-8">
+                                        <div class="flex justify-between items-center mb-4">
+                                            <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                                                {{ $message->name }} {{ $message->surname }}
+                                            </h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ $message->email }}
+                                            </p>
+                                        </div>
+                                        <p class="text-gray-700 dark:text-gray-300">{{ $message->message }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Confirmation Modal -->
     <div id="confirmationModal"

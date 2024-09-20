@@ -101,11 +101,28 @@ class ApartmentsController extends Controller
      */
     public function show(int $id, Request $request)
     {
-        $apartment = Apartment::findOrFail($id);
+        // Recupera l'appartamento tramite l'ID
+        $apartment = Apartment::with('sponsors')->findOrFail($id);
+
+        // Recupera i messaggi associati all'appartamento
         $messages = Message::where('apartment_id', $apartment->id)->get();
 
-        return view('auth.apartments.show', compact('apartment', 'messages'));
+        // Recupera le sponsorizzazioni attive (con 'end_date' maggiore della data attuale)
+        $activeSponsors = $apartment->sponsors()->wherePivot('end_date', '>', now())->get();
+
+        // Calcola il tempo totale accumulato
+        $totalTime = $activeSponsors->sum(function ($sponsor) {
+            return $sponsor->time; // Usa il campo 'time' del modello Sponsor
+        });
+
+        // Converti il tempo totale in ore e minuti
+        $totalHours = floor($totalTime / 3600);
+        $totalMinutes = ($totalTime % 3600) / 60;
+
+        // Passa l'appartamento, i messaggi, le sponsorizzazioni attive, il tempo totale alla vista
+        return view('auth.apartments.show', compact('apartment', 'messages', 'activeSponsors', 'totalHours', 'totalMinutes'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

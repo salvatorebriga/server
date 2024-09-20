@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('apartments', ApartmentsController::class);
     Route::delete('/messages/multiple', [MessageController::class, 'destroyMultiple'])->name('messages.destroyMultiple');
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('messages.destroy');
-    Route::post('/sponsorship/{apartment}', [SponsorshipController::class, 'store'])->name('sponsorship.store');
+    Route::post('/sponsorship', [SponsorshipController::class, 'store'])->name('sponsorship.store');
 });
 
 Route::get('/autocomplete', [AutocompleteController::class, 'autocomplete']);

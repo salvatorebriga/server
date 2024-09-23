@@ -68,7 +68,7 @@ class ApartmentsController extends Controller
                 $latitude = $data['results'][0]['position']['lat'];
                 $longitude = $data['results'][0]['position']['lon'];
             } else {
-                return redirect()->back()->withErrors('Indirizzo non trovato');
+                return redirect()->back()->withErrors('Address not found');
             }
 
             $apartment = new Apartment();
@@ -90,10 +90,10 @@ class ApartmentsController extends Controller
                 $apartment->services()->sync($request->input('services'));
             }
 
-            return redirect()->route('apartments.index')->with('success', 'Appartamento creato con successo');
+            return redirect()->route('apartments.index')->with('success', 'Apartment created successfully');
         } catch (\Exception $e) {
             Log::error('Error creating apartment: ' . $e->getMessage());
-            return redirect()->back()->withErrors('Si è verificato un errore durante la creazione dell\'appartamento.');
+            return redirect()->back()->withErrors('An error occurred while creating the apartment.');
         }
     }
 
@@ -102,28 +102,18 @@ class ApartmentsController extends Controller
      */
     public function show(int $id, Request $request)
     {
-        // Recupera l'appartamento tramite l'ID
         $apartment = Apartment::with('sponsors')->findOrFail($id);
-
-        // Recupera i messaggi associati all'appartamento
         $messages = Message::where('apartment_id', $apartment->id)->get();
-
-        // Recupera le sponsorizzazioni attive (con 'end_date' maggiore della data attuale)
         $activeSponsors = $apartment->sponsors()->wherePivot('end_date', '>', now())->get();
-
-        // Calcola il tempo totale accumulato
         $totalTime = $activeSponsors->sum(function ($sponsor) {
-            return $sponsor->time; // Usa il campo 'time' del modello Sponsor
+            return $sponsor->time;
         });
 
-        // Converti il tempo totale in ore e minuti
         $totalHours = floor($totalTime / 3600);
         $totalMinutes = ($totalTime % 3600) / 60;
 
-        // Passa l'appartamento, i messaggi, le sponsorizzazioni attive, il tempo totale alla vista
         return view('auth.apartments.show', compact('apartment', 'messages', 'activeSponsors', 'totalHours', 'totalMinutes'));
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -155,7 +145,6 @@ class ApartmentsController extends Controller
         ]);
 
         $apartment = Apartment::findOrFail($id);
-
         $addressChanged = $apartment->address !== $validated['address'];
 
         $apartment->title = $validated['title'];
@@ -192,11 +181,11 @@ class ApartmentsController extends Controller
                     $apartment->latitude = $data['results'][0]['position']['lat'];
                     $apartment->longitude = $data['results'][0]['position']['lon'];
                 } else {
-                    return redirect()->back()->withErrors('Indirizzo non trovato');
+                    return redirect()->back()->withErrors('Address not found');
                 }
             } catch (\Exception $e) {
                 Log::error('Error updating apartment coordinates: ' . $e->getMessage());
-                return redirect()->back()->withErrors('Si è verificato un errore durante l\'aggiornamento delle coordinate.');
+                return redirect()->back()->withErrors('An error occurred while updating the coordinates.');
             }
         }
 
@@ -206,7 +195,7 @@ class ApartmentsController extends Controller
             $apartment->services()->sync($request->input('services'));
         }
 
-        return redirect()->route('apartments.index')->with('success', 'Appartamento aggiornato con successo');
+        return redirect()->route('apartments.index')->with('success', 'Apartment updated successfully');
     }
 
     /**
@@ -222,7 +211,7 @@ class ApartmentsController extends Controller
 
         $apartment->delete();
 
-        return redirect()->route('apartments.index')->with('success', 'Appartamento eliminato con successo');
+        return redirect()->route('apartments.index')->with('success', 'Apartment deleted successfully');
     }
 
     public function stats($id, Request $request)

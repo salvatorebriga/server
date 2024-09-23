@@ -12,8 +12,9 @@
             </a>
         </div>
     </x-slot>
-   
     <div class="max-w-7xl mx-auto px-4 py-12">
+        @include('shared.errors')
+        @include('shared.success')
         @if ($apartments->isEmpty())
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <p class="text-gray-600 dark:text-gray-400">No apartments found.</p>

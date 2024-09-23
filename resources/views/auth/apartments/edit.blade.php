@@ -4,10 +4,10 @@
             Update Apartment
         </h2>
     </x-slot>
-
-    @include('shared.errors')
-
     <div class="max-w-7xl mx-auto px-4 py-12">
+        
+            @include('shared.errors')
+            @include('shared.success')
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
             <form action="{{ route('apartments.update', $apartment->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf

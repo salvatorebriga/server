@@ -4,9 +4,10 @@
             Apartment Details
         </h2>
     </x-slot>
-
     <div class="py-12 bg-gray-100 dark:bg-gray-900">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @include('shared.errors')
+            @include('shared.success')
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 sm:p-8">
                     <!-- Centered Image Section -->

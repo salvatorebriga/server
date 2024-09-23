@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\ApartmentsController;
 use App\Http\Controllers\AutocompleteController;
 use App\Http\Controllers\Auth\MessageController;
 use App\Http\Controllers\Auth\SponsorshipController;
+use App\Http\Controllers\Auth\DashboardController as ControllersDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +20,12 @@ use App\Http\Controllers\Auth\SponsorshipController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [ControllersDashboardController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

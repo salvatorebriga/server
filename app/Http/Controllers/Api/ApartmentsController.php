@@ -103,6 +103,7 @@ class ApartmentsController extends Controller
             'services' => $apartment->services->map(function ($service) {
                 return [
                     'name' => $service->name,
+                    'icon' => $service->icon,
                 ];
             }),
         ]);

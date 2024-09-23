@@ -12,7 +12,7 @@
             </a>
         </div>
     </x-slot>
-    @include('shared.success')
+   
     <div class="max-w-7xl mx-auto px-4 py-12">
         @if ($apartments->isEmpty())
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">

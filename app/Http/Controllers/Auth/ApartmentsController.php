@@ -267,6 +267,9 @@ class ApartmentsController extends Controller
             }
         }
 
+        $labels = array_reverse($labels);
+        $views = array_reverse($views);
+
         $totalViews = Statistic::where('apartment_id', $id)->count();
 
         return view('auth.apartments.stats', compact('apartment', 'labels', 'views', 'totalViews', 'period'));

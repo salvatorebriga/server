@@ -272,11 +272,25 @@
     </div>
 
     <!-- Modale di conferma -->
+    <!-- Modale di conferma -->
     <div id="confirmationModal"
         class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Payment Successful!</h3>
             <p class="text-gray-700 dark:text-gray-200">Your payment has been processed successfully.</p>
+            <button type="button" onclick="resetDropin()"
+                class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Close</button>
+        </div>
+    </div>
+
+    <!-- Modale di errore -->
+    <div id="errorModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold text-red-600 dark:text-red-400 mb-4">Payment Rejected!</h3>
+            <p class="text-gray-700 dark:text-gray-200">There was an error processing your payment. Please check your
+                payment details and try again.</p>
+            <button type="button" onclick="closeErrorModal()"
+                class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Close</button>
         </div>
     </div>
 
@@ -284,6 +298,12 @@
     <script>
         var button = document.querySelector('#pay-button');
         var instance; // Variabile per l'istanza del Drop-in
+
+        // Prevenzione del comportamento predefinito del form
+        var form = document.getElementById('sponsorship-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Blocca il submit automatico del form
+        });
 
         document.getElementById('sponsor-button').addEventListener('click', function() {
             document.getElementById('sponsorshipModal').classList.remove('hidden');
@@ -301,10 +321,11 @@
             instance.requestPaymentMethod(function(err, payload) {
                 if (err) {
                     console.error(err);
-                    return;
+                    showErrorModal(); // Mostra la modale di errore
+                    return; // Blocca l'invio del form se c'è un errore
                 }
-                // Invia il nonce al server con il form
-                var form = document.getElementById('sponsorship-form');
+
+                // Aggiungi il nonce al form solo se il pagamento va a buon fine
                 var nonceInput = document.createElement('input');
                 nonceInput.setAttribute('type', 'hidden');
                 nonceInput.setAttribute('name', 'payment_method_nonce');
@@ -320,13 +341,14 @@
                 // Mostra la modale di conferma
                 document.getElementById('confirmationModal').classList.remove('hidden');
 
-                // Chiudi automaticamente la modale dopo 3 secondi (3000 ms)
+                // Chiudi automaticamente la modale dopo 10 secondi (10000 ms)
                 setTimeout(function() {
                     document.getElementById('confirmationModal').classList.add('hidden');
+                    resetDropin(); // Resetta l'istanza di Drop-in
                 }, 10000);
 
-                // Invia il form
-                form.submit(); // Questo invia il form
+                // Invia il form solo se il pagamento è riuscito
+                form.submit();
             });
         });
 
@@ -339,6 +361,44 @@
                 document.getElementById('pay-button').classList.remove('hidden');
             });
         });
+
+        // Funzione per mostrare la modale di errore
+        function showErrorModal() {
+            document.getElementById('errorModal').classList.remove('hidden');
+        }
+
+        // Funzione per chiudere la modale di errore
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.add('hidden');
+            resetDropin(); // Resetta l'istanza di Drop-in anche dopo un errore
+        }
+
+        // Funzione per resettare il Drop-in e preparare un nuovo pagamento
+        function resetDropin() {
+            // Elimina l'istanza corrente del Drop-in e nascondi la modale
+            if (instance) {
+                instance.teardown(function(teardownErr) {
+                    if (teardownErr) {
+                        console.error('Could not tear down Drop-in instance:', teardownErr);
+                    } else {
+                        // Ricrea l'istanza del Drop-in
+                        braintree.dropin.create({
+                            authorization: 'sandbox_g42y39zw_348pk9cgf3bgyw2b',
+                            selector: '#dropin-container'
+                        }, function(err, dropinInstance) {
+                            instance = dropinInstance;
+                        });
+
+                        // Mostra di nuovo le opzioni di sponsorizzazione e il bottone "Pay Now"
+                        document.querySelectorAll('input[name="sponsorship"], #pay-button').forEach(function(el) {
+                            el.closest('label') ? el.closest('label').style.display = 'block' : el.style
+                                .display = 'block';
+                        });
+                    }
+                });
+            }
+        }
+
         ////////////////////////////non cancellare ////////////////////////////////////////////////
         function closeModal() {
             document.getElementById('confirmationModal').classList.add('hidden');

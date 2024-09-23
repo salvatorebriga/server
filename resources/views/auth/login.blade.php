@@ -67,7 +67,7 @@
         @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
         body {
-            background-color: #f0f4f8;
+            background-color: #646668;
             font-family: 'Poppins', sans-serif;
             height: 100vh;
             display: flex;

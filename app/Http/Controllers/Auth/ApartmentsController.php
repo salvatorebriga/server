@@ -230,11 +230,9 @@ class ApartmentsController extends Controller
         $apartment = Apartment::findOrFail($id);
         $period = $request->input('period', 'daily');
 
-        // Definisci il range di date in base al periodo scelto
         $startDate = now()->subDays($period === 'daily' ? 30 : ($period === 'weekly' ? 7 : 30));
         $groupBy = $period === 'daily' ? 'DATE(created_at)' : ($period === 'weekly' ? 'WEEK(created_at)' : 'MONTH(created_at)');
 
-        // Ottieni le visualizzazioni
         $dailyViews = Statistic::where('apartment_id', $id)
             ->where('created_at', '>=', $startDate)
             ->selectRaw("$groupBy as date, COUNT(*) as views")
@@ -242,11 +240,9 @@ class ApartmentsController extends Controller
             ->orderBy('date', 'ASC')
             ->get();
 
-        // Inizializza le etichette e le visualizzazioni
         $labels = [];
         $views = [];
 
-        // Crea un array per le visualizzazioni
         if ($period === 'daily') {
             for ($i = 0; $i < 30; $i++) {
                 $currentDay = now()->subDays($i)->format('Y-m-d');
@@ -266,6 +262,9 @@ class ApartmentsController extends Controller
                 $views[] = $dailyViews->where('date', now()->subMonths($i)->format('Y-m'))->sum('views') ?? 0;
             }
         }
+
+        $labels = array_reverse($labels);
+        $views = array_reverse($views);
 
         $totalViews = Statistic::where('apartment_id', $id)->count();
 

@@ -225,21 +225,50 @@ class ApartmentsController extends Controller
         return redirect()->route('apartments.index')->with('success', 'Appartamento eliminato con successo');
     }
 
-    public function stats($id)
+    public function stats($id, Request $request)
     {
         $apartment = Apartment::findOrFail($id);
+        $period = $request->input('period', 'daily');
 
+        // Definisci il range di date in base al periodo scelto
+        $startDate = now()->subDays($period === 'daily' ? 30 : ($period === 'weekly' ? 7 : 30));
+        $groupBy = $period === 'daily' ? 'DATE(created_at)' : ($period === 'weekly' ? 'WEEK(created_at)' : 'MONTH(created_at)');
+
+        // Ottieni le visualizzazioni
         $dailyViews = Statistic::where('apartment_id', $id)
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as views')
+            ->where('created_at', '>=', $startDate)
+            ->selectRaw("$groupBy as date, COUNT(*) as views")
             ->groupBy('date')
             ->orderBy('date', 'ASC')
             ->get();
 
-        $labels = $dailyViews->pluck('date')->toArray();
-        $views = $dailyViews->pluck('views')->toArray();
+        // Inizializza le etichette e le visualizzazioni
+        $labels = [];
+        $views = [];
+
+        // Crea un array per le visualizzazioni
+        if ($period === 'daily') {
+            for ($i = 0; $i < 30; $i++) {
+                $currentDay = now()->subDays($i)->format('Y-m-d');
+                $labels[] = $currentDay;
+                $views[] = $dailyViews->where('date', $currentDay)->first()->views ?? 0;
+            }
+        } elseif ($period === 'weekly') {
+            for ($i = 0; $i < 4; $i++) {
+                $currentWeek = now()->subWeeks($i)->startOfWeek()->format('Y-m-d');
+                $labels[] = "Week of " . $currentWeek;
+                $views[] = $dailyViews->where('date', now()->subWeeks($i)->format('W'))->sum('views') ?? 0;
+            }
+        } else {
+            for ($i = 0; $i < 12; $i++) {
+                $currentMonth = now()->subMonths($i)->format('F Y');
+                $labels[] = $currentMonth;
+                $views[] = $dailyViews->where('date', now()->subMonths($i)->format('Y-m'))->sum('views') ?? 0;
+            }
+        }
 
         $totalViews = Statistic::where('apartment_id', $id)->count();
 
-        return view('auth.apartments.stats', compact('apartment', 'labels', 'views', 'totalViews'));
+        return view('auth.apartments.stats', compact('apartment', 'labels', 'views', 'totalViews', 'period'));
     }
 }

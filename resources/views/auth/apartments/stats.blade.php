@@ -8,10 +8,12 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <h3 class="text-lg font-semibold mb-4">Total Views: {{ $totalViews }}</h3>
+                <h3 class="text-lg text-gray-800 dark:text-gray-200 font-semibold mb-4">Total Views: {{ $totalViews }}
+                </h3>
 
                 <form method="GET" action="{{ route('apartments.stats', $apartment->id) }}">
-                    <select name="period" onchange="this.form.submit()">
+                    <select class="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200" name="period"
+                        onchange="this.form.submit()">
                         <option value="daily" {{ $period === 'daily' ? 'selected' : '' }}>Daily</option>
                         <option value="weekly" {{ $period === 'weekly' ? 'selected' : '' }}>Weekly</option>
                         <option value="monthly" {{ $period === 'monthly' ? 'selected' : '' }}>Monthly</option>

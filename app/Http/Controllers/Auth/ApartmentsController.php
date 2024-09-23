@@ -230,8 +230,16 @@ class ApartmentsController extends Controller
         $apartment = Apartment::findOrFail($id);
         $period = $request->input('period', 'daily');
 
-        $startDate = now()->subDays($period === 'daily' ? 30 : ($period === 'weekly' ? 7 : 30));
-        $groupBy = $period === 'daily' ? 'DATE(created_at)' : ($period === 'weekly' ? 'WEEK(created_at)' : 'MONTH(created_at)');
+        if ($period === 'daily') {
+            $startDate = now()->subDays(30);
+            $groupBy = 'DATE(created_at)';
+        } elseif ($period === 'weekly') {
+            $startDate = now()->subWeeks(4)->startOfWeek();
+            $groupBy = 'YEARWEEK(created_at, 1)';
+        } else {
+            $startDate = now()->subMonths(12)->startOfMonth();
+            $groupBy = 'DATE_FORMAT(created_at, "%Y-%m")';
+        }
 
         $dailyViews = Statistic::where('apartment_id', $id)
             ->where('created_at', '>=', $startDate)
@@ -253,13 +261,13 @@ class ApartmentsController extends Controller
             for ($i = 0; $i < 4; $i++) {
                 $currentWeek = now()->subWeeks($i)->startOfWeek()->format('Y-m-d');
                 $labels[] = "Week of " . $currentWeek;
-                $views[] = $dailyViews->where('date', now()->subWeeks($i)->format('W'))->sum('views') ?? 0;
+                $views[] = $dailyViews->where('date', now()->subWeeks($i)->format('oW'))->sum('views') ?? 0;
             }
         } else {
             for ($i = 0; $i < 12; $i++) {
-                $currentMonth = now()->subMonths($i)->format('F Y');
-                $labels[] = $currentMonth;
-                $views[] = $dailyViews->where('date', now()->subMonths($i)->format('Y-m'))->sum('views') ?? 0;
+                $currentMonth = now()->subMonths($i)->format('Y-m');
+                $labels[] = now()->subMonths($i)->format('F Y');
+                $views[] = $dailyViews->where('date', $currentMonth)->sum('views') ?? 0;
             }
         }
 

@@ -21,6 +21,11 @@
                 </form>
 
                 <canvas id="viewsChart"></canvas>
+
+                <a href="{{ route('apartments.show', $apartment->id) }}"
+                    class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                    Back to Apartment
+                </a>
             </div>
         </div>
     </div>

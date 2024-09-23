@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Apartment;
 use App\Models\Message;
 use App\Models\Service;
+use App\Models\Statistic;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -222,5 +223,23 @@ class ApartmentsController extends Controller
         $apartment->delete();
 
         return redirect()->route('apartments.index')->with('success', 'Appartamento eliminato con successo');
+    }
+
+    public function stats($id)
+    {
+        $apartment = Apartment::findOrFail($id);
+
+        $dailyViews = Statistic::where('apartment_id', $id)
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as views')
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->get();
+
+        $labels = $dailyViews->pluck('date')->toArray();
+        $views = $dailyViews->pluck('views')->toArray();
+
+        $totalViews = Statistic::where('apartment_id', $id)->count();
+
+        return view('auth.apartments.stats', compact('apartment', 'labels', 'views', 'totalViews'));
     }
 }

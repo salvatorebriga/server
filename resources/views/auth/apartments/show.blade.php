@@ -146,6 +146,10 @@
                             class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 ease-in-out">
                             Sponsor Apartment
                         </button>
+                        <a href="{{ route('apartments.stats', $apartment->id) }}"
+                            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out">
+                            View Stats
+                        </a>
                         <a href="{{ route('apartments.edit', $apartment->id) }}"
                             class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out">
                             Edit Apartment

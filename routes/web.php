@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('apartments', ApartmentsController::class);
+    Route::get('/apartments/{id}/stats', [ApartmentsController::class, 'stats'])->name('apartments.stats');
     Route::delete('/messages/multiple', [MessageController::class, 'destroyMultiple'])->name('messages.destroyMultiple');
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('messages.destroy');
     Route::post('/sponsorship/store', [SponsorshipController::class, 'store'])->name('sponsorship.store');

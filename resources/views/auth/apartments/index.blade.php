@@ -62,7 +62,7 @@
   </div>
 
   <!-- Modal -->
-  <div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg dark:text-white">
       <h2 class="text-lg font-semibold">Confirm Deletion</h2>
       <p class="mt-2">Are you sure you want to delete this apartment?</p>

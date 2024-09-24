@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Apartment;
 use App\Models\Service;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {
     /**
-     * 
+     * Cerca appartamenti basati su latitudine e longitudine di una città e filtra in base al raggio.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -29,37 +31,45 @@ class SearchController extends Controller
         $minRooms = $request->input('min_rooms', 1);
         $services = $request->input('services', []);
 
-        $firstApartment = Apartment::select('latitude', 'longitude')
-            ->where('address', 'like', '%' . $query . '%')
-            ->first();
+        try {
+            $client = new Client(['verify' => false]);
+            $apiKey = env('TOMTOM_API_KEY');
+            $response = $client->get("https://api.tomtom.com/search/2/geocode/{$query}.json", [
+                'query' => [
+                    'view' => 'Unified',
+                    'key' => $apiKey
+                ]
+            ]);
 
-        if (!$firstApartment) {
-            return response()->json([]);
-        }
+            $data = json_decode($response->getBody(), true);
 
-        $firstLat = $firstApartment->latitude;
-        $firstLng = $firstApartment->longitude;
-
-        $apartments = Apartment::select('id', 'title', 'address', 'img', 'latitude', 'longitude', 'rooms', 'beds', 'bathrooms', 'mq', 'is_available', 'user_id')
-            ->with('user')
-            ->with('services')
-            ->get();
-
-        $filteredApartments = $apartments->filter(function ($apartment) use ($firstLat, $firstLng, $radius, $minRooms, $services) {
-            $distance = $this->calculateDistance($firstLat, $firstLng, $apartment->latitude, $apartment->longitude);
-
-            $isWithinRadius = $distance <= $radius;
-            $hasEnoughRooms = $apartment->rooms >= $minRooms;
-
-            $isAvailable = $apartment->is_available;
-
-            $hasRequiredServices = true;
-            if (!empty($services)) {
-                $apartmentServices = $apartment->services->pluck('name')->toArray();
-                $hasRequiredServices = count(array_intersect($services, $apartmentServices)) === count($services);
+            if (!isset($data['results'][0])) {
+                return response()->json(['error' => 'Località non trovata'], 404);
             }
 
-            return $isWithinRadius && $hasEnoughRooms && $hasRequiredServices && $isAvailable;
+            $firstLat = $data['results'][0]['position']['lat'];
+            $firstLng = $data['results'][0]['position']['lon'];
+        } catch (\Exception $e) {
+            Log::error('Errore nella chiamata a TomTom: ' . $e->getMessage());
+            return response()->json(['error' => 'Errore nel recupero delle coordinate'], 500);
+        }
+
+        $apartmentsQuery = Apartment::select('id', 'title', 'address', 'img', 'latitude', 'longitude', 'rooms', 'beds', 'bathrooms', 'mq', 'is_available', 'user_id')
+            ->where('is_available', true)
+            ->where('rooms', '>=', $minRooms)
+            ->with(['user', 'services']);
+
+        if (!empty($services)) {
+            $apartmentsQuery->whereHas('services', function ($q) use ($services) {
+                $q->whereIn('name', $services);
+            });
+        }
+
+        $apartments = $apartmentsQuery->get();
+
+        $filteredApartments = $apartments->filter(function ($apartment) use ($firstLat, $firstLng, $radius) {
+            $distance = $this->calculateDistance($firstLat, $firstLng, $apartment->latitude, $apartment->longitude);
+            return $distance <= $radius;
         })->values();
 
         $apartmentsArray = $filteredApartments->map(function ($apartment) {
@@ -87,7 +97,7 @@ class SearchController extends Controller
     }
 
     /**
-     * 
+     * Calcola la distanza tra due coordinate geografiche utilizzando la formula dell'haversine.
      *
      * @param float $lat1
      * @param float $lng1
@@ -112,18 +122,18 @@ class SearchController extends Controller
         return $earthRadius * $angle;
     }
 
-    // ...
-
     /**
+     * Restituisce tutti i servizi disponibili.
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAvailableServices()
     {
         try {
-            // Recupera tutti i servizi dalla tabella services
             $services = Service::select('id', 'name')->get();
             return response()->json($services);
         } catch (\Exception $e) {
+            Log::error('Errore nel recupero dei servizi: ' . $e->getMessage());
             return response()->json(['error' => 'Errore nel recupero dei servizi'], 500);
         }
     }

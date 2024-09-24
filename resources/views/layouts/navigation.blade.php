@@ -7,7 +7,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="/">
                         <!-- Inserisci qui il percorso del tuo logo -->
-                        <img src="{{ asset('img/boolbnb-logo2.png') }}" alt="Logo" class=" h-8 w-auto" />
+                        <img src="{{ asset('img/boolbnb-logo2.png') }}" alt="Logo" class=" ps-8 h-8 w-auto" />
                     </a>
                 </div>
 

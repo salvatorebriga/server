@@ -58,10 +58,25 @@
                             display: true,
                             text: 'Views'
                         },
-                        beginAtZero: true
+                        beginAtZero: true,
+                        suggestedMin: 0,
+                        suggestedMax: 10,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function(value) {
+                                return Number.isInteger(value) ? value : null;
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        enabled: true
                     }
                 }
             }
         });
     </script>
+
+
 </x-app-layout>

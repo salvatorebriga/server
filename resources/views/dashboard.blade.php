@@ -8,11 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Messaggio di benvenuto -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
-                <div class="text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
+
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Scheda Visitatori Totali -->
@@ -94,12 +90,22 @@
                     options: {
                         scales: {
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                                suggestedMax: 3,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        return Number.isInteger(value) ? value :
+                                            null;
+                                    }
+                                }
                             }
-                        }
+                        },
                     }
                 });
             @endforeach
         });
     </script>
+
 </x-app-layout>

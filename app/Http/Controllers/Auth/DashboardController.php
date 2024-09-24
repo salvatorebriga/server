@@ -25,6 +25,11 @@ class DashboardController extends Controller
                 ->count();
         }
 
+        // Conteggio totale dei messaggi per tutti gli appartamenti
+        $totalMessages = $apartments->sum(function ($apartment) {
+            return $apartment->messages()->count();
+        });
+
         // Imposta un appartamento predefinito
         $apartmentId = $apartments->first()->id ?? null;
         $period = 'daily';
@@ -50,7 +55,25 @@ class DashboardController extends Controller
             $views = array_reverse($views);
         }
 
+        // Calcola il totale delle visite per la settimana corrente e la settimana precedente
+        $currentWeekViews = Statistic::where('apartment_id', $apartmentId)
+            ->where('created_at', '>=', now()->startOfWeek())
+            ->count();
+
+        $previousWeekViews = Statistic::where('apartment_id', $apartmentId)
+            ->where('created_at', '>=', now()->subWeeks(1)->startOfWeek())
+            ->where('created_at', '<', now()->startOfWeek())
+            ->count();
+
+        // Calcolo percentuale dell'incremento/decremento
+        $percentageChange = 0;
+        if ($previousWeekViews > 0) {
+            $percentageChange = (($currentWeekViews - $previousWeekViews) / $previousWeekViews) * 100;
+        } elseif ($currentWeekViews > 0) {
+            $percentageChange = 100; // Se ci sono state visite solo questa settimana
+        }
+
         // Ritorna la vista della dashboard con le statistiche e gli appartamenti
-        return view('dashboard', compact('apartments', 'totalViews', 'apartmentId', 'labels', 'views', 'period', 'todayViews'));
+        return view('dashboard', compact('apartments', 'totalViews', 'apartmentId', 'labels', 'views', 'period', 'todayViews', 'totalMessages', 'percentageChange'));
     }
 }

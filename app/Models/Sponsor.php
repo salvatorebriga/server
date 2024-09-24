@@ -28,15 +28,23 @@ class Sponsor extends Model
             $startDate = Carbon::parse($this->pivot->start_date)->timezone(config('app.timezone'));
             $endDate = Carbon::parse($this->pivot->end_date)->timezone(config('app.timezone'));
 
+            // Controlla se la sponsorizzazione è ancora attiva
             if ($now->isBetween($startDate, $endDate)) {
                 // Se la sponsorizzazione è ancora attiva, calcola il tempo residuo in secondi
                 return $endDate->diffInSeconds($now);
+            } else {
+                // Se la sponsorizzazione è scaduta, rimuovi l'entry dal pivot table
+                $this->apartments()->wherePivot('apartment_id', $this->pivot->apartment_id)
+                    ->wherePivot('sponsor_id', $this->id)
+                    ->detach();
             }
         }
 
         // Se la sponsorizzazione è scaduta o il pivot non esiste, restituisci 0
         return 0;
     }
+
+
 
     // Metodo per rimuovere sponsorizzazioni scadute automaticamente
     public static function boot()

@@ -105,15 +105,19 @@ class ApartmentsController extends Controller
         $apartment = Apartment::with('sponsors')->findOrFail($id);
         $messages = Message::where('apartment_id', $apartment->id)->get();
         $activeSponsors = $apartment->sponsors()->wherePivot('end_date', '>', now())->get();
+
         $totalTime = $activeSponsors->sum(function ($sponsor) {
-            return $sponsor->time;
+            return $sponsor->remainingTime(); 
         });
 
-        $totalHours = floor($totalTime / 3600);
-        $totalMinutes = ($totalTime % 3600) / 60;
+        // Calcola ore e minuti
+        $totalHours = floor($totalTime / 3600); 
+        $totalMinutes = floor(($totalTime % 3600) / 60); 
 
         return view('auth.apartments.show', compact('apartment', 'messages', 'activeSponsors', 'totalHours', 'totalMinutes'));
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

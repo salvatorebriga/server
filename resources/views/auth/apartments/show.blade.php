@@ -132,8 +132,9 @@
                         </div>
                         <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
                             <h5 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Sponsored Time</h5>
-                            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ $totalHours }}h
-                                {{ $totalMinutes }}m</p>
+                            <p class="text-xl font-bold text-gray-900 dark:text-white">
+                                {{ $totalHours }}h {{ $totalMinutes }}m
+                            </p>
                         </div>
                     </div>
 
@@ -272,7 +273,7 @@
         </div>
     </div>
 
-    <!-- Modale di conferma -->
+
     <!-- Modale di conferma -->
     <div id="confirmationModal"
         class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">

@@ -22,16 +22,19 @@ class Sponsor extends Model
     {
         $now = Carbon::now();
 
-        // Converti start_date e end_date in oggetti Carbon e imposta il timezone
-        $startDate = Carbon::parse($this->pivot->start_date)->timezone(config('app.timezone'));
-        $endDate = Carbon::parse($this->pivot->end_date)->timezone(config('app.timezone'));
+        // Verifica che il pivot esista prima di accedere a start_date ed end_date
+        if ($this->pivot && $this->pivot->start_date && $this->pivot->end_date) {
+            // Converti start_date e end_date in oggetti Carbon e imposta il timezone
+            $startDate = Carbon::parse($this->pivot->start_date)->timezone(config('app.timezone'));
+            $endDate = Carbon::parse($this->pivot->end_date)->timezone(config('app.timezone'));
 
-        if ($now->isBetween($startDate, $endDate)) {
-            // Se la sponsorizzazione è ancora attiva, calcola il tempo residuo in secondi
-            return $endDate->diffInSeconds($now);
+            if ($now->isBetween($startDate, $endDate)) {
+                // Se la sponsorizzazione è ancora attiva, calcola il tempo residuo in secondi
+                return $endDate->diffInSeconds($now);
+            }
         }
 
-        // Se la sponsorizzazione è scaduta, restituisci 0
+        // Se la sponsorizzazione è scaduta o il pivot non esiste, restituisci 0
         return 0;
     }
 
@@ -42,12 +45,14 @@ class Sponsor extends Model
 
         // Evento per controllare e rimuovere le sponsorizzazioni scadute quando il modello viene recuperato
         static::retrieved(function ($sponsor) {
-            $now = Carbon::now();
-            $endDate = Carbon::parse($sponsor->pivot->end_date);
+            if ($sponsor->pivot && $sponsor->pivot->end_date) {
+                $now = Carbon::now();
+                $endDate = Carbon::parse($sponsor->pivot->end_date);
 
-            // Se la sponsorizzazione è scaduta, elimina la relazione dal pivot table
-            if ($now->greaterThan($endDate)) {
-                $sponsor->apartments()->detach($sponsor->id);
+                // Se la sponsorizzazione è scaduta, elimina la relazione dal pivot table
+                if ($now->greaterThan($endDate)) {
+                    $sponsor->apartments()->detach($sponsor->id);
+                }
             }
         });
     }

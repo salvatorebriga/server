@@ -5,9 +5,9 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="/">
                         <!-- Inserisci qui il percorso del tuo logo -->
-                        <img src="{{ asset('img/boolbnb-logo.png') }}" alt="Logo" class=" h-20 w-auto" />
+                        <img src="{{ asset('img/boolbnb-logo2.png') }}" alt="Logo" class=" h-8 w-auto" />
                     </a>
                 </div>
 

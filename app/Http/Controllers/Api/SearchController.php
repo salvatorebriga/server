@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class SearchController extends Controller
 {
     /**
-     * Cerca appartamenti basati su latitudine e longitudine di una città e filtra in base al raggio.
+     * Search apartments based on city latitude and longitude, and filter by radius, rooms, and services.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -44,20 +44,19 @@ class SearchController extends Controller
             $data = json_decode($response->getBody(), true);
 
             if (!isset($data['results'][0])) {
-                return response()->json(['error' => 'Località non trovata'], 404);
+                return response()->json(['error' => 'Location not found'], 404);
             }
 
             $firstLat = $data['results'][0]['position']['lat'];
             $firstLng = $data['results'][0]['position']['lon'];
         } catch (\Exception $e) {
-            Log::error('Errore nella chiamata a TomTom: ' . $e->getMessage());
-            return response()->json(['error' => 'Errore nel recupero delle coordinate'], 500);
+            Log::error('Error calling TomTom API: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to retrieve coordinates'], 500);
         }
 
         $apartmentsQuery = Apartment::select('id', 'title', 'address', 'img', 'latitude', 'longitude', 'rooms', 'beds', 'bathrooms', 'mq', 'is_available', 'user_id')
             ->where('is_available', true)
-            ->where('rooms', '>=', $minRooms)
-            ->with(['user', 'services']);
+            ->where('rooms', '>=', $minRooms);
 
         if (!empty($services)) {
             $apartmentsQuery->whereHas('services', function ($q) use ($services) {
@@ -65,7 +64,7 @@ class SearchController extends Controller
             });
         }
 
-        $apartments = $apartmentsQuery->get();
+        $apartments = $apartmentsQuery->with(['user', 'services', 'sponsors'])->get();
 
         $filteredApartments = $apartments->filter(function ($apartment) use ($firstLat, $firstLng, $radius) {
             $distance = $this->calculateDistance($firstLat, $firstLng, $apartment->latitude, $apartment->longitude);
@@ -73,6 +72,7 @@ class SearchController extends Controller
         })->values();
 
         $apartmentsArray = $filteredApartments->map(function ($apartment) {
+            $isSponsored = $apartment->sponsors->isNotEmpty();
             return [
                 'id' => $apartment->id,
                 'title' => $apartment->title,
@@ -85,6 +85,7 @@ class SearchController extends Controller
                 'bathrooms' => $apartment->bathrooms,
                 'mq' => $apartment->mq,
                 'is_available' => $apartment->is_available,
+                'is_sponsored' => $isSponsored,
                 'user' => [
                     'name' => $apartment->user->name,
                     'surname' => $apartment->user->surname,
@@ -97,7 +98,7 @@ class SearchController extends Controller
     }
 
     /**
-     * Calcola la distanza tra due coordinate geografiche utilizzando la formula dell'haversine.
+     * Calculate distance between two geographical coordinates using the haversine formula.
      *
      * @param float $lat1
      * @param float $lng1
@@ -123,8 +124,6 @@ class SearchController extends Controller
     }
 
     /**
-     * Restituisce tutti i servizi disponibili.
-     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAvailableServices()
@@ -133,8 +132,8 @@ class SearchController extends Controller
             $services = Service::select('id', 'name')->get();
             return response()->json($services);
         } catch (\Exception $e) {
-            Log::error('Errore nel recupero dei servizi: ' . $e->getMessage());
-            return response()->json(['error' => 'Errore nel recupero dei servizi'], 500);
+            Log::error('Error retrieving services: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to retrieve services'], 500);
         }
     }
 }

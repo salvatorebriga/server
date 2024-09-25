@@ -126,21 +126,21 @@
                     <!-- Action Buttons -->
                     <div class="flex flex-wrap justify-between items-center gap-4 mt-8">
                         <a href="{{ route('apartments.index') }}"
-                            class="px-4 py-2 bg-gray-100 text-black rounded-lg hover:bg-slate-300 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
+                            class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
                             Back to List
                         </a>
 
                         <div class="flex flex-grow justify-center gap-4">
                             <button id="sponsor-button"
-                                class="px-4 py-2 bg-gray-100 text-black rounded-lg hover:bg-slate-300 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
+                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
                                 Sponsor Apartment
                             </button>
                             <a href="{{ route('apartments.stats', $apartment->id) }}"
-                                class="px-4 py-2 bg-gray-100 text-black rounded-lg hover:bg-slate-300 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
+                                class="px-4 py-2 bg-blue-600 text-white rounded-lg  hover:bg-blue-700 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
                                 View Stats
                             </a>
                             <a href="{{ route('apartments.edit', $apartment->id) }}"
-                                class="px-4 py-2 bg-gray-100 text-black rounded-lg hover:bg-slate-300 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
+                                class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
                                 Edit Apartment
                             </a>
                         </div>

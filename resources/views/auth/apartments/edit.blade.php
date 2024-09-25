@@ -5,9 +5,9 @@
         </h2>
     </x-slot>
     <div class="max-w-7xl mx-auto px-4 py-12">
-        
-            @include('shared.errors')
-            @include('shared.success')
+
+        @include('shared.errors')
+        @include('shared.success')
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
             <form action="{{ route('apartments.update', $apartment->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -25,7 +25,7 @@
                     <div class="relative w-full">
                         <x-input-label for="address" :value="__('Address*')" />
                         <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"
-                            :value="old('address', $apartment->address)" oninput="getAutocomplete()" required autofocus />
+                            :value="old('address', $apartment->address)" oninput="getAutocomplete()" required autofocus autocomplete="off" />
                         <ul id="results"
                             class="absolute w-full bg-white mt-1 rounded-lg shadow-lg overflow-hidden z-10 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300">
                         </ul>

@@ -77,9 +77,20 @@
             updateThemeIcon();
         }
 
+        // Funzione debounce
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
         //TomTom Autocomplete
-        function getAutocomplete() {
-            //value dell'input
+        // Funzione di autocompletamento con debounce
+        const getAutocomplete = debounce(function() {
+            // value dell'input
             const query = document.getElementById('address').value;
 
             if (query.length < 4) {
@@ -89,7 +100,8 @@
 
             fetch(`/autocomplete?query=${query}`, {
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
                     }
                 })
                 .then(response => response.json())
@@ -106,15 +118,14 @@
                         li.addEventListener('click', function() {
                             document.getElementById('address').value = result.address
                                 .freeformAddress;
-                            resultsContainer.innerHTML = ''; // Pulire la lista dopo aver selezionato
+                            resultsContainer.innerHTML =
+                            ''; // Pulire la lista dopo aver selezionato
                         });
                         resultsContainer.appendChild(li);
-
                     });
-
                 })
                 .catch(error => console.error('Errore:', error));
-        }
+        }, 300); // 300 millisecondi di debounce
     </script>
 </head>
 

@@ -12,6 +12,7 @@
                 <div class="p-6 sm:p-8">
                     <!-- Centered Image Section -->
                     <div class="mb-8">
+
                         @if ($apartment->img)
                             <img src="{{ asset('storage/' . $apartment->img) }}" alt="Apartment Image"
                                 class="w-full max-w-3xl mx-auto h-auto rounded-lg shadow-md">
@@ -46,42 +47,26 @@
                         <!-- Features -->
                         <div>
                             <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Features</h4>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-2 gap-4 lg:mt-14 sm:mt-0 md:mt-14">
                                 <div class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                        </path>
-                                    </svg>
-                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->rooms }} Rooms</span>
+                                    <i class="fa-solid fa-person-shelter w-5 h-5 mr-2 text-indigo-500"></i>
+                                    <span class="text-gray-700 dark:text-gray-300 ps-3">{{ $apartment->rooms }}
+                                        Rooms</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
-                                        </path>
-                                    </svg>
-                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->beds }} Beds</span>
+                                    <i class="fa-solid fa-bed w-5 h-5 mr-2 text-indigo-500"></i>
+                                    <span class="text-gray-700 dark:text-gray-300 ps-3">{{ $apartment->beds }}
+                                        Beds</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
-                                    </svg>
-                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->bathrooms }}
+                                    <i class="fa-solid fa-toilet w-5 h-5 mr-2 text-indigo-500"></i>
+                                    <span class="text-gray-700 dark:text-gray-300 ps-3">{{ $apartment->bathrooms }}
                                         Bathrooms</span>
                                 </div>
+
                                 <div class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4">
-                                        </path>
-                                    </svg>
-                                    <span class="text-gray-700 dark:text-gray-300">{{ $apartment->mq }} m²</span>
+                                    <i class="fa-solid fa-expand w-5 h-5 mr-2 text-indigo-500 "></i>
+                                    <span class="text-gray-700 dark:text-gray-300 ps-3">{{ $apartment->mq }} m²</span>
                                 </div>
                             </div>
                         </div>
@@ -139,23 +124,31 @@
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex flex-wrap justify-center gap-4 mt-8">
+                    <div class="flex flex-wrap justify-between items-center gap-4 mt-8">
                         <a href="{{ route('apartments.index') }}"
-                            class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300 ease-in-out">
+                            class="px-4 py-2 bg-gray-100 text-black rounded-lg hover:bg-slate-300 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
                             Back to List
                         </a>
-                        <button id="sponsor-button"
-                            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 ease-in-out">
-                            Sponsor Apartment
+
+                        <div class="flex flex-grow justify-center gap-4">
+                            <button id="sponsor-button"
+                                class="px-4 py-2 bg-gray-100 text-black rounded-lg hover:bg-slate-300 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
+                                Sponsor Apartment
+                            </button>
+                            <a href="{{ route('apartments.stats', $apartment->id) }}"
+                                class="px-4 py-2 bg-gray-100 text-black rounded-lg hover:bg-slate-300 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
+                                View Stats
+                            </a>
+                            <a href="{{ route('apartments.edit', $apartment->id) }}"
+                                class="px-4 py-2 bg-gray-100 text-black rounded-lg hover:bg-slate-300 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
+                                Edit Apartment
+                            </a>
+                        </div>
+
+                        <button onclick="confirmDelete('{{ $apartment->id }}')"
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 hover:translate-y-1 transition duration-300 ease-in-out text-sm">
+                            Delete Apartment
                         </button>
-                        <a href="{{ route('apartments.stats', $apartment->id) }}"
-                            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out">
-                            View Stats
-                        </a>
-                        <a href="{{ route('apartments.edit', $apartment->id) }}"
-                            class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out">
-                            Edit Apartment
-                        </a>
                     </div>
                 </div>
             </div>
@@ -274,7 +267,7 @@
     </div>
 
 
-    <!-- Modale di conferma -->
+    <!-- Modale di conferma braintree-->
     <div id="confirmationModal"
         class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -285,7 +278,7 @@
         </div>
     </div>
 
-    <!-- Modale di errore -->
+    <!-- Modale di errore braintree-->
     <div id="errorModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <h3 class="text-lg font-semibold text-red-600 dark:text-red-400 mb-4">Payment Rejected!</h3>
@@ -295,9 +288,22 @@
                 class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Close</button>
         </div>
     </div>
-
+    <!-- Modal delete apartment -->
+    <div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg dark:text-white">
+            <h2 class="text-lg font-semibold">Confirm Deletion</h2>
+            <p class="mt-2">Are you sure you want to delete this apartment?</p>
+            <div class="mt-4 flex justify-end">
+                <button id="cancelBtn"
+                    class="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded mr-2">Cancel</button>
+                <button id="confirmBtn" class="px-4 py-2 bg-red-600 text-white rounded">Delete</button>
+            </div>
+        </div>
+    </div>
     <script src="https://js.braintreegateway.com/web/dropin/1.43.0/js/dropin.js"></script>
     <script>
+        ////////////////////////////Modal braintree////////////////////////////////////////////////
+
         var button = document.querySelector('#pay-button');
         var instance; // Variabile per l'istanza del Drop-in
 
@@ -401,7 +407,7 @@
             }
         }
 
-        ////////////////////////////non cancellare ////////////////////////////////////////////////
+        ////////////////////////////Modal delete messages////////////////////////////////////////////////
         function closeModal() {
             document.getElementById('confirmationModal').classList.add('hidden');
         }
@@ -416,6 +422,25 @@
                 alert("Please select at least one message to delete.");
             }
         }
-    </script>
+        ////////////////////////////Modal delete apartment////////////////////////////////////////////////
+        let apartmentIdToDelete;
 
+        function confirmDelete(apartmentId) {
+            apartmentIdToDelete = apartmentId;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        document.getElementById('cancelBtn').onclick = function() {
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
+
+        document.getElementById('confirmBtn').onclick = function() {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/apartments/' + apartmentIdToDelete;
+            form.innerHTML = `@csrf @method('DELETE')`;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
 </x-app-layout>

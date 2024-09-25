@@ -5,9 +5,9 @@
         </h2>
     </x-slot>
 
-    @include('shared.errors')
 
     <div class="max-w-7xl mx-auto px-4 py-12">
+        @include('shared.errors')
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
             <form action="{{ route('apartments.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -17,6 +17,9 @@
                     <x-input-label for="title" :value="__('Title*')" />
                     <x-text-input id="title" class="block mt-1 w-full" type="text" name="title"
                         :value="old('title')" required autofocus />
+                    @error('title')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Address -->
@@ -28,6 +31,9 @@
                         <ul id="results"
                             class="absolute w-full bg-white mt-1 rounded-lg shadow-lg overflow-hidden z-10 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300">
                         </ul>
+                        @error('address')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -45,24 +51,36 @@
                         <x-text-input id="mq" class="block mt-1 w-full"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="mq" :value="old('mq')"
                             required />
+                        @error('mq')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <x-input-label for="rooms" :value="__('Rooms*')" />
                         <x-text-input id="rooms" class="block mt-1 w-full"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="rooms" :value="old('rooms')"
                             required />
+                        @error('rooms')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <x-input-label for="beds" :value="__('Beds*')" />
                         <x-text-input id="beds" class="block mt-1 w-full"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="beds" :value="old('beds')"
                             required />
+                        @error('beds')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <x-input-label for="bathrooms" :value="__('Bathrooms*')" />
                         <x-text-input id="bathrooms" class="block mt-1 w-full"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="bathrooms"
                             :value="old('bathrooms')" required />
+                        @error('bathrooms')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -84,6 +102,9 @@
                             </div>
                         @endforeach
                     </div>
+                    @error('services')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Availability -->

@@ -93,7 +93,7 @@ class ApartmentsController extends Controller
             return redirect()->route('apartments.index')->with('success', 'Apartment created successfully');
         } catch (\Exception $e) {
             Log::error('Error creating apartment: ' . $e->getMessage());
-            return redirect()->back()->withErrors('An error occurred while creating the apartment.');
+            return redirect()->back()->withErrors('An error occurred while creating the apartment.')->withInput();
         }
     }
 

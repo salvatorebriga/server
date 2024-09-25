@@ -32,6 +32,7 @@ class SearchController extends Controller
         $services = $request->input('services', []);
 
         try {
+            // Ottieni latitudine e longitudine usando l'API TomTom
             $client = new Client(['verify' => false]);
             $apiKey = env('TOMTOM_API_KEY');
             $response = $client->get("https://api.tomtom.com/search/2/geocode/{$query}.json", [
@@ -54,10 +55,12 @@ class SearchController extends Controller
             return response()->json(['error' => 'Failed to retrieve coordinates'], 500);
         }
 
+        // Query degli appartamenti
         $apartmentsQuery = Apartment::select('id', 'title', 'address', 'img', 'latitude', 'longitude', 'rooms', 'beds', 'bathrooms', 'mq', 'is_available', 'user_id')
             ->where('is_available', true)
             ->where('rooms', '>=', $minRooms);
 
+        // Filtra per servizi, se selezionato
         if (!empty($services)) {
             $apartmentsQuery->whereHas('services', function ($q) use ($services) {
                 $q->whereIn('name', $services);
@@ -66,13 +69,19 @@ class SearchController extends Controller
 
         $apartments = $apartmentsQuery->with(['user', 'services', 'sponsors'])->get();
 
+        // Filtro degli appartamenti basato sul raggio
         $filteredApartments = $apartments->filter(function ($apartment) use ($firstLat, $firstLng, $radius) {
             $distance = $this->calculateDistance($firstLat, $firstLng, $apartment->latitude, $apartment->longitude);
             return $distance <= $radius;
         })->values();
 
-        $apartmentsArray = $filteredApartments->map(function ($apartment) {
+        // Calcola la similarità tra l'indirizzo dell'appartamento e la query
+        $filteredApartments = $filteredApartments->map(function ($apartment) use ($query) {
+            $similarity = 0;
+            similar_text(strtolower($query), strtolower($apartment->address), $similarity);
+
             $isSponsored = $apartment->sponsors->isNotEmpty();
+
             return [
                 'id' => $apartment->id,
                 'title' => $apartment->title,
@@ -86,13 +95,25 @@ class SearchController extends Controller
                 'mq' => $apartment->mq,
                 'is_available' => $apartment->is_available,
                 'is_sponsored' => $isSponsored,
+                'similarity' => $similarity, // Aggiungi il punteggio di similarità
                 'user' => [
                     'name' => $apartment->user->name,
                     'surname' => $apartment->user->surname,
                 ],
                 'services' => $apartment->services->pluck('name')->toArray(),
             ];
-        })->toArray();
+        });
+
+        // Ordina per appartamenti sponsorizzati e poi per la similarità dell'indirizzo
+        $apartmentsArray = $filteredApartments->sort(function ($a, $b) {
+            // Priorità 1: Sponsorizzati
+            if ($a['is_sponsored'] != $b['is_sponsored']) {
+                return $b['is_sponsored'] - $a['is_sponsored'];
+            }
+
+            // Priorità 2: Similarità dell'indirizzo
+            return $b['similarity'] <=> $a['similarity'];
+        })->values()->toArray();
 
         return response()->json($apartmentsArray);
     }
